@@ -19,14 +19,44 @@ from typing import Dict, Optional, Tuple, List
 import numpy as np
 from PIL import Image, ImageEnhance, ImageFilter
 import cv2
-import pytesseract
-import easyocr
-import torch
-from torchvision import models, transforms
+
+# Optional OCR imports (may not be available on cloud)
+try:
+    import pytesseract
+    PYTESSERACT_AVAILABLE = True
+except ImportError:
+    pytesseract = None
+    PYTESSERACT_AVAILABLE = False
+
+try:
+    import easyocr
+    EASYOCR_AVAILABLE = True
+except ImportError:
+    easyocr = None
+    EASYOCR_AVAILABLE = False
+
+# Optional ML imports
+try:
+    import torch
+    from torchvision import models, transforms
+    TORCH_AVAILABLE = True
+except ImportError:
+    torch = None
+    models = None
+    transforms = None
+    TORCH_AVAILABLE = False
+
+try:
+    import chromadb
+    from chromadb.config import Settings
+    CHROMADB_AVAILABLE = True
+except ImportError:
+    chromadb = None
+    Settings = None
+    CHROMADB_AVAILABLE = False
+
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
-import chromadb
-from chromadb.config import Settings
 
 from config import Config
 from services.diagram_processor_final import DiagramPage

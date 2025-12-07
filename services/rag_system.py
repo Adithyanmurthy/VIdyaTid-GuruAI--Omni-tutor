@@ -22,10 +22,22 @@ import re
 from dotenv import load_dotenv
 load_dotenv()
 
-# Embeddings and Vector Store
-from sentence_transformers import SentenceTransformer
-import chromadb
-from chromadb.config import Settings
+# Embeddings and Vector Store (optional imports)
+try:
+    from sentence_transformers import SentenceTransformer
+    SENTENCE_TRANSFORMERS_AVAILABLE = True
+except ImportError:
+    SentenceTransformer = None
+    SENTENCE_TRANSFORMERS_AVAILABLE = False
+
+try:
+    import chromadb
+    from chromadb.config import Settings
+    CHROMADB_AVAILABLE = True
+except ImportError:
+    chromadb = None
+    Settings = None
+    CHROMADB_AVAILABLE = False
 
 # Configuration
 from config import Config

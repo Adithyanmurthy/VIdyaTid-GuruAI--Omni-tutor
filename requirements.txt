@@ -17,6 +17,10 @@ SQLAlchemy>=2.0.23
 # Google Gemini API
 google-generativeai>=0.3.2
 
+# Vector Store and Embeddings
+chromadb>=0.4.18
+sentence-transformers>=2.2.2
+
 # Image Processing
 Pillow>=10.0.0
 opencv-python-headless>=4.8.0

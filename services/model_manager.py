@@ -7,8 +7,16 @@ import gc
 import threading
 from pathlib import Path
 from typing import Optional, Dict, Any
-from llama_cpp import Llama
 import logging
+import os
+
+# Optional llama_cpp import (not available on cloud deployments)
+try:
+    from llama_cpp import Llama
+    LLAMA_CPP_AVAILABLE = True
+except ImportError:
+    Llama = None
+    LLAMA_CPP_AVAILABLE = False
 
 logger = logging.getLogger(__name__)
 

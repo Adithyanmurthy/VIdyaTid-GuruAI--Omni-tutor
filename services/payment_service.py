@@ -3,10 +3,17 @@ Payment Service for VidyaTid using Razorpay.
 Handles subscriptions, one-time payments, and webhook processing.
 """
 import os
-import razorpay
 import hmac
 import hashlib
 import logging
+
+# Optional razorpay import
+try:
+    import razorpay
+    RAZORPAY_AVAILABLE = True
+except ImportError:
+    razorpay = None
+    RAZORPAY_AVAILABLE = False
 from typing import Dict, Optional, Any
 from datetime import datetime, timedelta
 from dotenv import load_dotenv

@@ -48,3 +48,10 @@ APScheduler>=3.10.4
 # Utilities
 requests>=2.31.0
 tqdm>=4.66.1
+psutil>=5.9.0
+
+# Payment (optional)
+# razorpay>=1.4.1
+
+# Voice (ElevenLabs)
+elevenlabs>=0.2.0

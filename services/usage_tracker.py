@@ -268,6 +268,21 @@ class UsageTracker:
             logger.error(f"Error incrementing usage for user {user_id}: {e}")
             return False
     
+    def _is_admin_user(self, user_id: str) -> bool:
+        """Check if user is admin with unlimited access."""
+        try:
+            from models.user import User
+            user = self.db.query(User).filter_by(user_id=user_id).first()
+            if user and user.preferences:
+                return (
+                    user.preferences.get('is_admin', False) or
+                    user.preferences.get('role') == 'admin' or
+                    user.preferences.get('unlimited_access', False)
+                )
+            return False
+        except Exception:
+            return False
+    
     def check_limit(self, user_id: str) -> LimitCheckResult:
         """
         Check if user can submit a query.
@@ -279,6 +294,14 @@ class UsageTracker:
             LimitCheckResult object
         """
         try:
+            # Admin users have unlimited access
+            if self._is_admin_user(user_id):
+                return LimitCheckResult(
+                    allowed=True,
+                    message="Admin user - unlimited access",
+                    queries_remaining=-1
+                )
+            
             today = datetime.utcnow().date()
             
             # Get usage record

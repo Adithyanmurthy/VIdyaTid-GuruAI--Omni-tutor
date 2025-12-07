@@ -27,12 +27,18 @@ def create_admin_user():
             print("Admin user (by username) already exists!")
             return
         
-        # Create admin user
+        # Create admin user with full access
         admin_user = User(
             username='admin',
             password='Admin@123',
             email='admin@test.com',
-            preferences={'role': 'admin', 'tier': 'premium'}
+            preferences={
+                'role': 'admin',
+                'tier': 'premium',
+                'is_admin': True,
+                'unlimited_access': True,
+                'all_features_enabled': True
+            }
         )
         
         db.add(admin_user)

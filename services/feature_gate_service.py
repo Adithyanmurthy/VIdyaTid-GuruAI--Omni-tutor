@@ -121,6 +121,29 @@ class FeatureGateService:
         if self._owns_session and self.db:
             self.db.close()
     
+    def _is_admin_user(self, user_id: str) -> bool:
+        """
+        Check if user is an admin with unlimited access.
+        
+        Args:
+            user_id: User ID
+            
+        Returns:
+            True if user is admin, False otherwise
+        """
+        try:
+            user = self.db.query(User).filter_by(user_id=user_id).first()
+            if user and user.preferences:
+                return (
+                    user.preferences.get('is_admin', False) or
+                    user.preferences.get('role') == 'admin' or
+                    user.preferences.get('unlimited_access', False)
+                )
+            return False
+        except Exception as e:
+            logger.error(f"Error checking admin status for {user_id}: {e}")
+            return False
+    
     def _get_user_tier(self, user_id: str) -> str:
         """
         Get user's current subscription tier.
@@ -130,8 +153,13 @@ class FeatureGateService:
             
         Returns:
             Tier name (defaults to 'free' if no subscription)
+            Returns 'premium' for admin users
         """
         try:
+            # Admin users get premium tier
+            if self._is_admin_user(user_id):
+                return 'premium'
+            
             subscription_info = self.subscription_service.get_user_subscription(user_id)
             if subscription_info and subscription_info.is_active:
                 return subscription_info.tier

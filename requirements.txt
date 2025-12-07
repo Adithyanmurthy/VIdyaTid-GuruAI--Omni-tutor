@@ -1,68 +1,47 @@
 # Web Framework
-Flask==3.0.0
-Flask-CORS==4.0.0
-Flask-Login==0.6.3
-Werkzeug==3.0.1
-gunicorn==21.2.0
+Flask>=3.0.0
+Flask-CORS>=4.0.0
+Flask-Login>=0.6.3
+Werkzeug>=3.0.1
+gunicorn>=21.2.0
 
 # Database
-SQLAlchemy==2.0.23
+SQLAlchemy>=2.0.23
 
-# Vector Store and Embeddings
-chromadb==0.4.18
-sentence-transformers==2.2.2
-torch>=2.2.0
-torchvision>=0.17.0
-
-# LLM Inference (local model - optional for cloud)
-# llama-cpp-python==0.2.90  # Disabled for cloud - using Gemini API instead
+# Vector Store and Embeddings (optional - comment out if not needed)
+# chromadb>=0.4.18
+# sentence-transformers>=2.2.2
+# torch>=2.2.0
+# torchvision>=0.17.0
 
 # Google Gemini API
-google-generativeai==0.3.2
+google-generativeai>=0.3.2
 
-# OCR and Image Processing
-pytesseract==0.3.10
-easyocr==1.7.1
-opencv-python==4.8.1.78
-Pillow==10.1.0
+# Image Processing
+Pillow>=10.0.0
+opencv-python-headless>=4.8.0
 
 # PDF Processing
-PyPDF2==3.0.1
-pdfplumber==0.10.3
-PyMuPDF==1.23.8
+PyPDF2>=3.0.1
+pdfplumber>=0.10.3
+PyMuPDF>=1.23.0
 
 # Text Processing
-nltk==3.8.1
-numpy==1.26.2
+nltk>=3.8.1
+numpy>=1.26.0
 
 # Visualization
-matplotlib==3.8.2
+matplotlib>=3.8.0
 
 # Security
-bcrypt==4.1.1
+bcrypt>=4.1.1
 
 # Environment Management
-python-dotenv==1.0.0
-
-# Testing
-pytest==7.4.3
-pytest-asyncio==0.21.1
-hypothesis==6.92.1
+python-dotenv>=1.0.0
 
 # Scheduling
-APScheduler==3.10.4
-
-# Voice Input/Output (optional - may not work on all cloud platforms)
-SpeechRecognition==3.10.0
-# pyttsx3==2.90  # Requires local audio - disabled for cloud
-# pyaudio==0.2.14  # Requires PortAudio - disabled for cloud
-# sounddevice==0.4.6  # Requires local audio - disabled for cloud
-soundfile==0.12.1
-
-# Handwriting Recognition (optional)
-# google-cloud-vision==3.4.5  # Requires credentials - configure separately
-# opencv-contrib-python==4.8.1.78  # Heavy - using opencv-python instead
+APScheduler>=3.10.4
 
 # Utilities
-requests==2.31.0
-tqdm==4.66.1
+requests>=2.31.0
+tqdm>=4.66.1

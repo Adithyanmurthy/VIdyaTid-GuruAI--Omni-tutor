@@ -62,6 +62,9 @@ tmp/
 temp/
 *.tmp
 
+# Generated video frames (too many files)
+generated_videos/video_frames/
+
 # User data
 user_data/
 progress_data/

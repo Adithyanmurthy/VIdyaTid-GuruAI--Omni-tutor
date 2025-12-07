@@ -45,17 +45,19 @@ class User(Base):
     subscription = relationship("Subscription", back_populates="user", uselist=False)
     payments = relationship("Payment", back_populates="user")
     
-    def __init__(self, username, password, preferences=None):
+    def __init__(self, username, password, email=None, preferences=None):
         """
         Initialize a new User.
         
         Args:
             username: Username for the account
             password: Plain text password (will be hashed)
+            email: Optional email address
             preferences: Optional dictionary of user preferences
         """
         self.user_id = str(uuid.uuid4())
         self.username = username
+        self.email = email
         self.password_hash = self._hash_password(password)
         self.created_at = datetime.utcnow()
         self.preferences = preferences or {}

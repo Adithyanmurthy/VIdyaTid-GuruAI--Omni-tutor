@@ -102,8 +102,16 @@ document.addEventListener('DOMContentLoaded', function() {
                 sessionStorage.removeItem('redirect_after_login');
                 window.location.href = redirectTo;
             } else {
-                // Show error
-                errorDiv.textContent = data.error || 'Login failed. Please try again.';
+                // Show error - handle both string and object error formats
+                let errorMessage = 'Login failed. Please try again.';
+                if (data.error) {
+                    if (typeof data.error === 'string') {
+                        errorMessage = data.error;
+                    } else if (data.error.message) {
+                        errorMessage = data.error.message;
+                    }
+                }
+                errorDiv.textContent = errorMessage;
                 errorDiv.classList.remove('hidden');
             }
         } catch (error) {
@@ -176,12 +184,20 @@ document.addEventListener('DOMContentLoaded', function() {
                     registerContainer.classList.remove('active');
                     loginContainer.classList.add('active');
                     
-                    // Pre-fill username in login form
-                    document.getElementById('login-username').value = username;
+                    // Pre-fill email in login form (use email if provided, otherwise username)
+                    document.getElementById('login-username').value = email || username;
                 }, 2000);
             } else {
-                // Show error
-                errorDiv.textContent = data.error || 'Registration failed. Please try again.';
+                // Show error - handle both string and object error formats
+                let errorMessage = 'Registration failed. Please try again.';
+                if (data.error) {
+                    if (typeof data.error === 'string') {
+                        errorMessage = data.error;
+                    } else if (data.error.message) {
+                        errorMessage = data.error.message;
+                    }
+                }
+                errorDiv.textContent = errorMessage;
                 errorDiv.classList.remove('hidden');
             }
         } catch (error) {

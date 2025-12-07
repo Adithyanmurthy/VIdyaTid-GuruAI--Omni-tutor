@@ -142,6 +142,7 @@ def register():
         
         username = data['username'].strip()
         password = data['password']
+        email = data.get('email', '').strip() if data.get('email') else None
         preferences = data.get('preferences', {})
         
         # Validate username
@@ -182,10 +183,22 @@ def register():
                     }
                 }), 409
             
+            # Check if email already exists (if provided)
+            if email:
+                existing_email = db.query(User).filter_by(email=email).first()
+                if existing_email:
+                    return jsonify({
+                        'error': {
+                            'code': 'EMAIL_EXISTS',
+                            'message': 'Email already registered'
+                        }
+                    }), 409
+            
             # Create new user
             new_user = User(
                 username=username,
                 password=password,
+                email=email,
                 preferences=preferences
             )
             

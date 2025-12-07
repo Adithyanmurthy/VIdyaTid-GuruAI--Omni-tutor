@@ -45,6 +45,25 @@ from config import Config
 # Cloudflare AI
 from services.cloudflare_ai import get_cloudflare_ai, is_cloudflare_ai_enabled
 
+# Gemini AI for embeddings
+import os
+USE_GEMINI = os.getenv('USE_GEMINI', 'false').lower() == 'true'
+
+def get_gemini_embeddings(text: str) -> list:
+    """Get embeddings using Gemini API."""
+    try:
+        import google.generativeai as genai
+        genai.configure(api_key=os.getenv('GEMINI_API_KEY'))
+        result = genai.embed_content(
+            model="models/embedding-001",
+            content=text,
+            task_type="retrieval_query"
+        )
+        return result['embedding']
+    except Exception as e:
+        logger.error(f"Gemini embeddings failed: {e}")
+        return None
+
 # Setup logging
 logging.basicConfig(level=logging.INFO, format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
@@ -76,18 +95,24 @@ class RAGSystem:
         self.embedding_model_name = embedding_model_name or Config.EMBEDDING_MODEL_NAME
         self.collection_name = collection_name or Config.CHROMA_COLLECTION_NAME
         
-        # Initialize embedding model (only if Cloudflare is not enabled)
-        if is_cloudflare_ai_enabled():
+        # Initialize embedding model - prefer Gemini API (lightweight)
+        self.embedding_model = None
+        self.use_gemini_embeddings = USE_GEMINI
+        
+        if USE_GEMINI:
+            logger.info("Using Gemini API for embeddings - no local model needed")
+        elif is_cloudflare_ai_enabled():
             logger.info("Using Cloudflare AI for embeddings (768d) - skipping local model load")
-            self.embedding_model = None
-        else:
+        elif SENTENCE_TRANSFORMERS_AVAILABLE:
             logger.info(f"Loading local embedding model: {self.embedding_model_name}")
             try:
                 self.embedding_model = SentenceTransformer(self.embedding_model_name)
                 logger.info("Local embedding model loaded successfully")
             except Exception as e:
                 logger.error(f"Failed to load embedding model: {e}")
-                raise
+                self.embedding_model = None
+        else:
+            logger.warning("No embedding model available - RAG will be limited")
         
         # Initialize ChromaDB client
         logger.info(f"Initializing ChromaDB at: {self.vector_store_path}")
@@ -141,16 +166,30 @@ class RAGSystem:
             # Generate query embedding using Cloudflare AI or local model
             logger.debug(f"Encoding query: {query[:100]}...")
             
-            if is_cloudflare_ai_enabled():
+            if self.use_gemini_embeddings:
+                try:
+                    logger.debug("Using Gemini API for embeddings")
+                    embedding = get_gemini_embeddings(query)
+                    if embedding:
+                        query_embedding = [embedding]
+                    else:
+                        raise Exception("Gemini embeddings returned None")
+                except Exception as e:
+                    logger.error(f"Gemini embeddings failed: {e}")
+                    return []
+            elif is_cloudflare_ai_enabled():
                 try:
                     logger.debug("Using Cloudflare AI (BGE) for embeddings")
                     cf_ai = get_cloudflare_ai()
                     query_embedding = [cf_ai.generate_embeddings(query)]
                 except Exception as e:
-                    logger.error(f"Cloudflare embeddings failed, using local model: {e}")
-                    query_embedding = self.embedding_model.encode([query]).tolist()
-            else:
+                    logger.error(f"Cloudflare embeddings failed: {e}")
+                    return []
+            elif self.embedding_model:
                 query_embedding = self.embedding_model.encode([query]).tolist()
+            else:
+                logger.error("No embedding model available")
+                return []
             
             # Prepare query parameters
             query_params = {

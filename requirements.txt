@@ -17,9 +17,8 @@ SQLAlchemy>=2.0.23
 # Google Gemini API
 google-generativeai>=0.3.2
 
-# Vector Store and Embeddings (disabled for free tier - uses too much memory)
-# chromadb>=0.4.18
-# sentence-transformers>=2.2.2
+# Vector Store (using Gemini for embeddings instead of sentence-transformers)
+chromadb>=0.4.18
 
 # Image Processing
 Pillow>=10.0.0

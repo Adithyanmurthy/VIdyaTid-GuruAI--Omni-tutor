@@ -3,6 +3,7 @@ Flask==3.0.0
 Flask-CORS==4.0.0
 Flask-Login==0.6.3
 Werkzeug==3.0.1
+gunicorn==21.2.0
 
 # Database
 SQLAlchemy==2.0.23
@@ -13,8 +14,11 @@ sentence-transformers==2.2.2
 torch>=2.2.0
 torchvision>=0.17.0
 
-# LLM Inference
-llama-cpp-python==0.2.90
+# LLM Inference (local model - optional for cloud)
+# llama-cpp-python==0.2.90  # Disabled for cloud - using Gemini API instead
+
+# Google Gemini API
+google-generativeai==0.3.2
 
 # OCR and Image Processing
 pytesseract==0.3.10
@@ -48,16 +52,16 @@ hypothesis==6.92.1
 # Scheduling
 APScheduler==3.10.4
 
-# Voice Input/Output
+# Voice Input/Output (optional - may not work on all cloud platforms)
 SpeechRecognition==3.10.0
-pyttsx3==2.90
-pyaudio==0.2.14
-sounddevice==0.4.6
+# pyttsx3==2.90  # Requires local audio - disabled for cloud
+# pyaudio==0.2.14  # Requires PortAudio - disabled for cloud
+# sounddevice==0.4.6  # Requires local audio - disabled for cloud
 soundfile==0.12.1
 
-# Handwriting Recognition
-google-cloud-vision==3.4.5
-opencv-contrib-python==4.8.1.78
+# Handwriting Recognition (optional)
+# google-cloud-vision==3.4.5  # Requires credentials - configure separately
+# opencv-contrib-python==4.8.1.78  # Heavy - using opencv-python instead
 
 # Utilities
 requests==2.31.0

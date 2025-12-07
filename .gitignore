@@ -2,15 +2,66 @@
 venv/
 *.venv
 env/
+.venv/
 
 # Python cache
 __pycache__/
 *.pyc
+*.pyo
+*.pyd
+.Python
 
 # Environment variables
 .env
+.env.local
 
 # IDE and OS files
 .idea/
 .vscode/
 *.DS_Store
+*.swp
+*.swo
+*~
+
+# Database files
+*.db
+*.sqlite
+*.sqlite3
+
+# AI Models (large files)
+models/*.bin
+models/*.gguf
+models/*.pt
+models/*.pth
+
+# Vector Store Data
+chroma_db/
+vector_store/
+
+# NCERT Content (large files)
+ncert_content/
+diagrams/
+previous_papers/
+
+# Logs
+*.log
+logs/
+
+# Test coverage
+.coverage
+htmlcov/
+.pytest_cache/
+
+# Build and distribution
+build/
+dist/
+*.egg-info/
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+
+# User data
+user_data/
+progress_data/

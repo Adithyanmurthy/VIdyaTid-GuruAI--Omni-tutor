@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuruAI 3D Visualizer - Interactive NCERT Concepts</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎓</text></svg>">
+    <link rel="stylesheet" href="{{ url_for('static', filename='visualizer.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Three.js for 3D rendering -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/three@0.128.0/examples/js/controls/OrbitControls.js"></script>
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="background-effects">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">
+                <div class="logo-icon">
+                    <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#gradient)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#667eea;stop-opacity:1" />
+                                <stop offset="100%" style="stop-color:#764ba2;stop-opacity:1" />
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <span class="logo-text">GuruAI</span>
+            </a>
+            <div class="nav-actions">
+                <a href="/" class="btn-nav">← Back to Home</a>
+                <a href="/tutor" class="btn-nav-secondary">AI Tutor</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="visualizer-container">
+            <!-- Header -->
+            <div class="visualizer-header">
+                <div class="header-info">
+                    <h1>3D NCERT Visualizer</h1>
+                    <p>Explore science concepts in interactive 3D</p>
+                </div>
+            </div>
+
+            <!-- Search Section -->
+            <div class="search-section">
+                <div class="search-container">
+                    <input 
+                        type="text" 
+                        id="concept-search" 
+                        class="concept-input"
+                        placeholder="Enter a concept: DNA structure, Benzene molecule, Cell membrane..."
+                    >
+                    <button id="generate-btn" class="btn-generate">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                        Generate 3D Model
+                    </button>
+                </div>
+                <div class="quick-concepts">
+                    <span class="quick-label">Quick concepts:</span>
+                    <button class="concept-chip" data-concept="DNA structure">DNA Structure</button>
+                    <button class="concept-chip" data-concept="Benzene molecule">Benzene</button>
+                    <button class="concept-chip" data-concept="Cell membrane">Cell Membrane</button>
+                    <button class="concept-chip" data-concept="Water molecule">Water Molecule</button>
+                    <button class="concept-chip" data-concept="Mitochondria">Mitochondria</button>
+                </div>
+            </div>
+
+            <!-- 3D Viewer Section -->
+            <div class="viewer-section">
+                <div id="3d-viewer-main" class="viewer-3d-main">
+                    <div class="viewer-placeholder">
+                        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M12 2L2 7l10 5 10-5-10-5z"/>
+                            <path d="M2 17l10 5 10-5"/>
+                            <path d="M2 12l10 5 10-5"/>
+                        </svg>
+                        <h3>No Model Loaded</h3>
+                        <p>Enter a concept above to generate a 3D visualization</p>
+                    </div>
+                </div>
+                
+                <div class="viewer-info">
+                    <div id="model-description" class="model-description hidden">
+                        <h3>About This Model</h3>
+                        <p id="description-text"></p>
+                    </div>
+                    
+                    <div class="viewer-controls">
+                        <h3>Controls</h3>
+                        <div class="control-grid">
+                            <button class="btn-control" id="reset-view">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/>
+                                    <path d="M21 3v5h-5"/>
+                                </svg>
+                                Reset View
+                            </button>
+                            <button class="btn-control" id="toggle-rotation">
+                                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M21.5 2v6h-6M2.5 22v-6h6"/>
+                                    <path d="M2 11.5a10 10 0 0 1 18.8-4.3M22 12.5a10 10 0 0 1-18.8 4.2"/>
+                                </svg>
+                                Toggle Rotation
+                            </button>
+                        </div>
+                        <div class="control-tips">
+                            <p><strong>Mouse Controls:</strong></p>
+                            <ul>
+                                <li>Left Click + Drag: Rotate</li>
+                                <li>Right Click + Drag: Pan</li>
+                                <li>Scroll: Zoom In/Out</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Examples Section -->
+            <div class="examples-section">
+                <h2>Example Visualizations</h2>
+                <div class="examples-grid">
+                    <div class="example-card" data-concept="DNA double helix">
+                        <div class="example-icon biology">🧬</div>
+                        <h3>DNA Structure</h3>
+                        <p>Double helix with base pairs</p>
+                        <span class="example-tag">Biology</span>
+                    </div>
+                    <div class="example-card" data-concept="Benzene molecule">
+                        <div class="example-icon chemistry">⚗️</div>
+                        <h3>Benzene Molecule</h3>
+                        <p>Aromatic ring structure</p>
+                        <span class="example-tag">Chemistry</span>
+                    </div>
+                    <div class="example-card" data-concept="Simple pendulum">
+                        <div class="example-icon physics">⚛️</div>
+                        <h3>Simple Pendulum</h3>
+                        <p>Physics apparatus setup</p>
+                        <span class="example-tag">Physics</span>
+                    </div>
+                    <div class="example-card" data-concept="Plant cell">
+                        <div class="example-icon biology">🌱</div>
+                        <h3>Plant Cell</h3>
+                        <p>Cell wall and organelles</p>
+                        <span class="example-tag">Biology</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='3d-viewer.js') }}"></script>
+    <script src="{{ url_for('static', filename='visualizer.js') }}"></script>
+</body>
+</html>

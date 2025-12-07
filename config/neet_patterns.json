@@ -1,0 +1,24 @@
+{
+  "2025": {
+    "Physics": 50,
+    "Chemistry": 50,
+    "Biology": 80,
+    "total": 180,
+    "duration_minutes": 200,
+    "marks_per_question": 4,
+    "negative_marks": -1,
+    "pattern_type": "choice",
+    "note": "Legacy pattern with Section A (compulsory) and Section B (choice)"
+  },
+  "2026": {
+    "Physics": 45,
+    "Chemistry": 45,
+    "Biology": 90,
+    "total": 180,
+    "duration_minutes": 180,
+    "marks_per_question": 4,
+    "negative_marks": -1,
+    "pattern_type": "all_compulsory",
+    "note": "New pattern - all questions compulsory, no sections"
+  }
+}

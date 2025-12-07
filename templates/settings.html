@@ -1,0 +1,602 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidyaTid - Settings</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user-profile-dropdown.css') }}">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <img src="{{ url_for('static', filename='VidyaTid Logo Sq.png') }}" alt="VidyaTid Logo" width="40" height="40" style="border-radius: 50%;">
+                <span>VidyaTid</span>
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/">Chat</a></li>
+                    <li><a href="/progress">Progress</a></li>
+                    <li><a href="/search">Search</a></li>
+                    <li><a href="/question-paper">Question Papers</a></li>
+                    <li><a href="/predictions">AI Predictions</a></li>
+                    <li><a href="/settings" class="active">Settings</a></li>
+                    <li class="user-menu-container">
+                        <a href="/auth" class="login-btn" id="login-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+                            Login
+                        </a>
+                        <div class="user-profile-dropdown hidden" id="user-profile-dropdown">
+                            <button class="profile-trigger" id="profile-trigger">
+                                <img src="{{ url_for('static', filename='VidyaTid Logo Sq.png') }}" alt="User Avatar" class="user-avatar" id="user-avatar">
+                                <span class="user-name" id="user-name">User</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div class="dropdown-menu" id="dropdown-menu">
+                                <div class="dropdown-header">
+                                    <img src="{{ url_for('static', filename='VidyaTid Logo Sq.png') }}" alt="User Avatar" class="dropdown-avatar">
+                                    <div class="dropdown-user-info">
+                                        <span class="dropdown-username" id="dropdown-username">User</span>
+                                        <span class="dropdown-email" id="dropdown-email">user@example.com</span>
+                                    </div>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a href="/chat" class="dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                                    Chat
+                                </a>
+                                <a href="/progress" class="dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+                                    My Progress
+                                </a>
+                                <a href="/settings" class="dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H1m18.2 5.2l-4.2-4.2m0-6l4.2-4.2"></path></svg>
+                                    Settings
+                                </a>
+                                <a href="/pricing" class="dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                                    Pricing
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="dropdown-item" id="logout-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                    Logout
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="content-area">
+        <div class="settings-container">
+            <div class="settings-header">
+                <h1>Settings</h1>
+                <p>Configure your VidyaTid experience</p>
+            </div>
+
+            <!-- Settings Navigation -->
+            <div class="settings-layout">
+                <div class="settings-sidebar">
+                    <nav class="settings-nav">
+                        <button class="settings-nav-item active" data-section="subscription">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                            Subscription
+                        </button>
+                        <button class="settings-nav-item" data-section="general">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H1m18.2 5.2l-4.2-4.2m0-6l4.2-4.2"></path></svg>
+                            General
+                        </button>
+                        <button class="settings-nav-item" data-section="performance">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+                            Performance
+                        </button>
+                        <button class="settings-nav-item" data-section="appearance">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path></svg>
+                            Appearance
+                        </button>
+                        <button class="settings-nav-item" data-section="voice">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 1a3 3 0 0 0-3 3v8a3 3 0 0 0 6 0V4a3 3 0 0 0-3-3z"></path><path d="M19 10v2a7 7 0 0 1-14 0v-2"></path></svg>
+                            Voice & Audio
+                        </button>
+                        <button class="settings-nav-item" data-section="privacy">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"></path></svg>
+                            Privacy
+                        </button>
+                        <button class="settings-nav-item" data-section="about">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="16" x2="12" y2="12"></line><line x1="12" y1="8" x2="12.01" y2="8"></line></svg>
+                            About
+                        </button>
+                    </nav>
+                </div>
+
+                <div class="settings-content">
+                    <!-- Subscription Management Section -->
+                    <div id="subscription-section" class="settings-section active">
+                        <h2>Subscription Management</h2>
+                        
+                        <div class="setting-group">
+                            <!-- Current Plan Card -->
+                            <div class="subscription-card">
+                                <div class="subscription-header">
+                                    <div>
+                                        <h3 id="current-plan-name">Loading...</h3>
+                                        <span class="subscription-status" id="subscription-status">Active</span>
+                                    </div>
+                                    <div class="subscription-price" id="subscription-price">₹0/month</div>
+                                </div>
+                                
+                                <div class="subscription-details">
+                                    <div class="detail-item">
+                                        <span class="detail-label">Renewal Date</span>
+                                        <span class="detail-value" id="renewal-date">--</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Auto-Renew</span>
+                                        <span class="detail-value" id="auto-renew-status">--</span>
+                                    </div>
+                                    <div class="detail-item">
+                                        <span class="detail-label">Daily Queries</span>
+                                        <span class="detail-value" id="daily-queries">--</span>
+                                    </div>
+                                </div>
+                                
+                                <div class="subscription-actions">
+                                    <button class="setting-btn primary" onclick="window.location.href='/pricing'">
+                                        Upgrade Plan
+                                    </button>
+                                    <button class="setting-btn" id="cancel-subscription-btn" onclick="handleCancelSubscription()">
+                                        Cancel Subscription
+                                    </button>
+                                </div>
+                            </div>
+                            
+                            <!-- Payment History -->
+                            <div class="payment-history">
+                                <h3>Payment History</h3>
+                                <div class="payment-table-container">
+                                    <table class="payment-table" id="payment-table">
+                                        <thead>
+                                            <tr>
+                                                <th>Date</th>
+                                                <th>Plan</th>
+                                                <th>Amount</th>
+                                                <th>Status</th>
+                                                <th>Invoice</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody id="payment-history-body">
+                                            <tr>
+                                                <td colspan="5" style="text-align: center; color: #94a3b8;">
+                                                    Loading payment history...
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- General Settings -->
+                    <div id="general-section" class="settings-section">
+                        <h2>General Settings</h2>
+                        
+                        <div class="setting-group">
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Target Exam</h3>
+                                    <p>Select your primary exam focus</p>
+                                </div>
+                                <select id="target-exam" class="setting-select">
+                                    <option value="JEE-Main">JEE Main</option>
+                                    <option value="JEE-Advanced">JEE Advanced</option>
+                                    <option value="NEET">NEET</option>
+                                    <option value="Both">Both JEE & NEET</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Default Language</h3>
+                                    <p>Language for explanations and interface</p>
+                                </div>
+                                <select id="default-language" class="setting-select">
+                                    <option value="en">English</option>
+                                    <option value="hi">Hindi</option>
+                                    <option value="hinglish">Hinglish</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Auto-save Progress</h3>
+                                    <p>Automatically save your progress</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="auto-save" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Show Hints</h3>
+                                    <p>Display hints before showing full solutions</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="show-hints" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Performance Settings -->
+                    <div id="performance-section" class="settings-section">
+                        <h2>Performance Settings</h2>
+                        
+                        <div class="setting-group">
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Memory Limit</h3>
+                                    <p>Maximum RAM usage for AI models (GB)</p>
+                                </div>
+                                <div class="slider-with-value">
+                                    <input type="range" id="memory-limit" min="2" max="16" value="6" step="1">
+                                    <span id="memory-limit-value">6 GB</span>
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Model Idle Timeout</h3>
+                                    <p>Unload AI model after inactivity (minutes)</p>
+                                </div>
+                                <div class="slider-with-value">
+                                    <input type="range" id="idle-timeout" min="1" max="60" value="10" step="1">
+                                    <span id="idle-timeout-value">10 min</span>
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Response Speed</h3>
+                                    <p>Balance between speed and quality</p>
+                                </div>
+                                <select id="response-speed" class="setting-select">
+                                    <option value="fast">Fast (Lower quality)</option>
+                                    <option value="balanced" selected>Balanced</option>
+                                    <option value="quality">Quality (Slower)</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Cache Responses</h3>
+                                    <p>Cache frequent queries for faster responses</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="cache-responses" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Current Memory Usage</h3>
+                                    <p id="memory-usage-text">Loading...</p>
+                                </div>
+                                <div class="memory-bar">
+                                    <div id="memory-bar-fill" class="memory-bar-fill" style="width: 0%"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Appearance Settings -->
+                    <div id="appearance-section" class="settings-section">
+                        <h2>Appearance Settings</h2>
+                        
+                        <div class="setting-group">
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Theme</h3>
+                                    <p>Choose your preferred color theme</p>
+                                </div>
+                                <select id="theme" class="setting-select">
+                                    <option value="light">Light</option>
+                                    <option value="dark" selected>Dark</option>
+                                    <option value="auto">Auto (System)</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Font Size</h3>
+                                    <p>Adjust text size for better readability</p>
+                                </div>
+                                <select id="font-size" class="setting-select">
+                                    <option value="small">Small</option>
+                                    <option value="medium" selected>Medium</option>
+                                    <option value="large">Large</option>
+                                    <option value="extra-large">Extra Large</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Compact Mode</h3>
+                                    <p>Reduce spacing for more content on screen</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="compact-mode">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Show Animations</h3>
+                                    <p>Enable smooth transitions and animations</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="show-animations" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Voice & Audio Settings -->
+                    <div id="voice-section" class="settings-section">
+                        <h2>Voice & Audio Settings</h2>
+                        
+                        <div class="setting-group">
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Enable Voice Input</h3>
+                                    <p>Use microphone for voice queries</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="enable-voice-input" checked>
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Voice Language</h3>
+                                    <p>Language for voice recognition</p>
+                                </div>
+                                <select id="voice-language" class="setting-select">
+                                    <option value="en">English</option>
+                                    <option value="hi">Hindi</option>
+                                    <option value="hinglish" selected>Hinglish</option>
+                                </select>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Text-to-Speech</h3>
+                                    <p>Read responses aloud</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="enable-tts">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Speech Speed</h3>
+                                    <p>Adjust reading speed</p>
+                                </div>
+                                <div class="slider-with-value">
+                                    <input type="range" id="speech-speed" min="0.5" max="2" value="1" step="0.1">
+                                    <span id="speech-speed-value">1.0x</span>
+                                </div>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Voice Type</h3>
+                                    <p>Select voice for text-to-speech</p>
+                                </div>
+                                <select id="voice-type" class="setting-select">
+                                    <option value="male">Male</option>
+                                    <option value="female" selected>Female</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Privacy Settings -->
+                    <div id="privacy-section" class="settings-section">
+                        <h2>Privacy Settings</h2>
+                        
+                        <div class="setting-group">
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Peer Comparison</h3>
+                                    <p>Share anonymous performance data for comparison</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="peer-comparison">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Usage Analytics</h3>
+                                    <p>Help improve VidyaTid with anonymous usage data</p>
+                                </div>
+                                <label class="toggle-switch">
+                                    <input type="checkbox" id="usage-analytics">
+                                    <span class="toggle-slider"></span>
+                                </label>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Data Storage Location</h3>
+                                    <p id="data-location">Loading...</p>
+                                </div>
+                                <button class="setting-btn" id="change-data-location">Change Location</button>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Export Data</h3>
+                                    <p>Download your progress and settings</p>
+                                </div>
+                                <button class="setting-btn" id="export-data">Export Data</button>
+                            </div>
+
+                            <div class="setting-item">
+                                <div class="setting-label">
+                                    <h3>Clear Cache</h3>
+                                    <p>Free up space by clearing cached data</p>
+                                </div>
+                                <button class="setting-btn" id="clear-cache">Clear Cache</button>
+                            </div>
+
+                            <div class="setting-item danger-zone">
+                                <div class="setting-label">
+                                    <h3>Delete All Data</h3>
+                                    <p>Permanently delete all your progress and settings</p>
+                                </div>
+                                <button class="setting-btn danger" id="delete-all-data">Delete All Data</button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- About Section -->
+                    <div id="about-section" class="settings-section">
+                        <h2>About VidyaTid</h2>
+                        
+                        <div class="about-content">
+                            <div class="about-logo">
+                                <svg width="80" height="80" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="#3b82f6" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path></svg>
+                            </div>
+                            <h3>VidyaTid</h3>
+                            <p class="version">Version 1.0.0</p>
+                            <p class="description">Your Personal Offline Study Partner for JEE & NEET Preparation</p>
+
+                            <div class="about-stats">
+                                <div class="stat-item">
+                                    <h4>NCERT Content</h4>
+                                    <p>Complete 2024-25 Edition</p>
+                                </div>
+                                <div class="stat-item">
+                                    <h4>Previous Papers</h4>
+                                    <p>20 Years Collection</p>
+                                </div>
+                                <div class="stat-item">
+                                    <h4>Diagrams</h4>
+                                    <p id="diagram-count">Loading...</p>
+                                </div>
+                            </div>
+
+                            <div class="about-links">
+                                <a href="#" class="about-link">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                                    Documentation
+                                </a>
+                                <a href="#" class="about-link">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 19c-5 1.5-5-2.5-7-3m14 6v-3.87a3.37 3.37 0 0 0-.94-2.61c3.14-.35 6.44-1.54 6.44-7A5.44 5.44 0 0 0 20 4.77 5.07 5.07 0 0 0 19.91 1S18.73.65 16 2.48a13.38 13.38 0 0 0-7 0C6.27.65 5.09 1 5.09 1A5.07 5.07 0 0 0 5 4.77a5.44 5.44 0 0 0-1.5 3.78c0 5.42 3.3 6.61 6.44 7A3.37 3.37 0 0 0 9 18.13V22"></path></svg>
+                                    GitHub
+                                </a>
+                                <a href="mailto:support@guruai.example.com" class="about-link">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                    Support
+                                </a>
+                            </div>
+
+                            <div class="about-team">
+                                <h4>Development Team</h4>
+                                <div class="team-list">
+                                    <div class="team-member-card">
+                                        <p class="member-name">Ajay Kumar T N</p>
+                                        <p class="member-role">Lead Developer</p>
+                                    </div>
+                                    <div class="team-member-card">
+                                        <p class="member-name">Adithya N Murthy</p>
+                                        <p class="member-role">AI Specialist</p>
+                                    </div>
+                                    <div class="team-member-card">
+                                        <p class="member-name">Abhishek Biradar</p>
+                                        <p class="member-role">UI/UX Designer</p>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="about-footer">
+                                <p>&copy; 2025 VidyaTid. All Rights Reserved.</p>
+                                <p>Made with ❤️ for JEE & NEET Aspirants</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Save Settings Button -->
+            <div class="settings-actions">
+                <button id="save-settings-btn" class="save-btn">Save Changes</button>
+                <button id="reset-settings-btn" class="reset-btn">Reset to Defaults</button>
+            </div>
+
+            <!-- Success/Error Messages -->
+            <div id="settings-message" class="settings-message hidden"></div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>For any issues or support, please email us at:</p>
+                <a href="mailto:support@vidyatid.com">support@vidyatid.com</a>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 VidyaTid. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Confirmation Modal -->
+    <div id="confirm-modal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 id="confirm-title">Confirm Action</h2>
+            </div>
+            <div class="modal-body">
+                <p id="confirm-message"></p>
+            </div>
+            <div class="modal-footer">
+                <button id="confirm-yes" class="modal-btn danger">Yes</button>
+                <button id="confirm-no" class="modal-btn">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="{{ url_for('static', filename='js/auth-check.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/user-profile-dropdown.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/feature-gate.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/settings.js') }}"></script>
+    <script>
+        // Settings is available for all tiers - no restriction needed
+        document.addEventListener('DOMContentLoaded', function() {
+            window.authCheck.updateAuthNavigation();
+        });
+    </script>
+</body>
+</html>

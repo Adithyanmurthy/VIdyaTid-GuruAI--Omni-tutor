@@ -1,0 +1,23 @@
+[
+  {
+    "topic": "Chemical Bonding",
+    "subject": null,
+    "timestamp": "2025-12-07T01:05:55.830014",
+    "video_path": "generated_videos/video_frames",
+    "success": true
+  },
+  {
+    "topic": "Chemical Bonding",
+    "subject": "Chemistry",
+    "timestamp": "2025-12-07T01:23:18.897656",
+    "video_path": "generated_videos/explainer_Educational_Video_20251207_012332.mp4",
+    "success": true
+  },
+  {
+    "topic": "Netwn Laws of motion",
+    "subject": null,
+    "timestamp": "2025-12-07T10:51:22.207277",
+    "video_path": "generated_videos/explainer_Educational_Video_20251207_105135.mp4",
+    "success": true
+  }
+]

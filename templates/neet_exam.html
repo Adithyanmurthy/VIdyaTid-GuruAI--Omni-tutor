@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEET Mock Exam - VidyaTid</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/neet-exam.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <!-- Instructions Screen -->
+    <div id="instructions-screen" class="screen active">
+        <div class="instructions-container">
+            <div class="exam-header">
+                <img src="{{ url_for('static', filename='VidyaTid Logo Sq.png') }}" alt="VidyaTid Logo" class="logo">
+                <h1>NEET Mock Examination</h1>
+                <p class="exam-subtitle">National Eligibility cum Entrance Test (UG)</p>
+            </div>
+
+            <div class="instructions-content">
+                <h2>📋 General Instructions</h2>
+                
+                <div class="instruction-section">
+                    <h3>1. Exam Details</h3>
+                    <ul>
+                        <li><strong>Total Questions:</strong> 180 (All Compulsory)</li>
+                        <li><strong>Duration:</strong> 180 minutes (3 hours)</li>
+                        <li><strong>Total Marks:</strong> 720</li>
+                        <li><strong>Marking Scheme:</strong> +4 for correct, -1 for incorrect, 0 for unattempted</li>
+                    </ul>
+                </div>
+
+                <div class="instruction-section">
+                    <h3>2. Subject-wise Distribution</h3>
+                    <ul>
+                        <li><strong>Physics:</strong> Questions 1-45 (45 questions)</li>
+                        <li><strong>Chemistry:</strong> Questions 46-90 (45 questions)</li>
+                        <li><strong>Biology:</strong> Questions 91-180 (90 questions)</li>
+                    </ul>
+                </div>
+                
+                <div class="instruction-section warning">
+                    <h3>⚠️ Important Rules & Regulations</h3>
+                    <ul>
+                        <li><strong>No Cheating:</strong> Tab switching and window changes are monitored</li>
+                        <li><strong>Full Screen:</strong> Exam must be taken in full-screen mode</li>
+                        <li><strong>No Copy-Paste:</strong> Right-click and text selection are disabled</li>
+                        <li><strong>Auto-Submit:</strong> Exam will auto-submit when time expires</li>
+                        <li><strong>No Return:</strong> Once submitted, you cannot retake the exam</li>
+                        <li><strong>Stable Internet:</strong> Ensure stable internet connection throughout</li>
+                    </ul>
+                </div>
+
+                <div class="instruction-section">
+                    <h3>3. Navigation & Marking</h3>
+                    <ul>
+                        <li>Click on question numbers to navigate between questions</li>
+                        <li>Use "Save & Next" to save answer and move to next question</li>
+                        <li>Use "Mark for Review" to mark questions for later review</li>
+                        <li>Use "Clear Response" to clear your selected answer</li>
+                        <li>Green = Answered, Orange = Marked for Review, Red = Not Answered</li>
+                    </ul>
+                </div>
+
+                <div class="instruction-section">
+                    <h3>4. Exam Controls</h3>
+                    <ul>
+                        <li>Timer will count down from 180 minutes</li>
+                        <li>You can submit exam before time expires</li>
+                        <li>Final submission requires confirmation</li>
+                        <li>Review all answers before final submission</li>
+                    </ul>
+                </div>
+
+                <div class="declaration">
+                    <label class="checkbox-container">
+                        <input type="checkbox" id="accept-terms">
+                        <span class="checkmark"></span>
+                        <span class="declaration-text">
+                            I have read and understood all the instructions. I agree to follow all exam rules and regulations. 
+                            I understand that any violation may result in disqualification.
+                        </span>
+                    </label>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn-secondary" onclick="window.history.back()">Cancel</button>
+                    <button class="btn-primary" id="start-exam-btn" disabled>Start Exam</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Exam Screen -->
+    <div id="exam-screen" class="screen">
+        <!-- Exam Header -->
+        <div class="exam-top-bar">
+            <div class="exam-info">
+                <span class="candidate-name" id="candidate-name">Candidate Name</span>
+                <span class="exam-title">NEET Mock Exam 2026</span>
+            </div>
+            <div class="timer-container">
+                <span class="timer-label">Time Remaining:</span>
+                <span class="timer" id="exam-timer">03:00:00</span>
+            </div>
+        </div>
+
+        <div class="exam-container">
+            <!-- Left Panel - Question Palette -->
+            <div class="question-palette-panel">
+                <div class="palette-header">
+                    <h3>Question Palette</h3>
+                </div>
+
+                <div class="palette-legend">
+                    <div class="legend-item">
+                        <span class="legend-box answered"></span>
+                        <span>Answered</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-box not-answered"></span>
+                        <span>Not Answered</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-box marked"></span>
+                        <span>Marked for Review</span>
+                    </div>
+                    <div class="legend-item">
+                        <span class="legend-box not-visited"></span>
+                        <span>Not Visited</span>
+                    </div>
+                </div>
+
+                <!-- Subject Sections -->
+                <div class="subject-section">
+                    <div class="subject-header" onclick="toggleSection('physics')">
+                        <span>Physics (1-45)</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="question-grid" id="physics-grid"></div>
+                </div>
+
+                <div class="subject-section">
+                    <div class="subject-header" onclick="toggleSection('chemistry')">
+                        <span>Chemistry (46-90)</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="question-grid" id="chemistry-grid"></div>
+                </div>
+
+                <div class="subject-section">
+                    <div class="subject-header" onclick="toggleSection('biology')">
+                        <span>Biology (91-180)</span>
+                        <span class="toggle-icon">▼</span>
+                    </div>
+                    <div class="question-grid" id="biology-grid"></div>
+                </div>
+
+                <div class="palette-summary">
+                    <div class="summary-item">
+                        <span class="summary-label">Answered:</span>
+                        <span class="summary-value" id="answered-count">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Not Answered:</span>
+                        <span class="summary-value" id="not-answered-count">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Marked:</span>
+                        <span class="summary-value" id="marked-count">0</span>
+                    </div>
+                    <div class="summary-item">
+                        <span class="summary-label">Not Visited:</span>
+                        <span class="summary-value" id="not-visited-count">180</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Panel - Question Display -->
+            <div class="question-display-panel">
+                <div class="question-header">
+                    <div class="question-info">
+                        <span class="question-label">Question No.</span>
+                        <span class="question-number" id="current-question-number">1</span>
+                        <span class="question-subject" id="current-subject">Physics</span>
+                    </div>
+                    <div class="question-marks">
+                        <span>Marks: +4 | -1</span>
+                    </div>
+                </div>
+
+                <div class="question-content" id="question-content">
+                    <!-- Question will be loaded here -->
+                </div>
+
+                <div class="options-container" id="options-container">
+                    <!-- Options will be loaded here -->
+                </div>
+
+                <div class="question-actions">
+                    <button class="btn-action" id="mark-review-btn">
+                        <span>🔖</span> Mark for Review & Next
+                    </button>
+                    <button class="btn-action" id="clear-response-btn">
+                        <span>✖</span> Clear Response
+                    </button>
+                    <button class="btn-action btn-primary" id="save-next-btn">
+                        <span>✓</span> Save & Next
+                    </button>
+                </div>
+
+                <div class="navigation-buttons">
+                    <button class="btn-nav" id="prev-btn">
+                        <span>←</span> Previous
+                    </button>
+                    <button class="btn-nav btn-primary" id="next-btn">
+                        Next <span>→</span>
+                    </button>
+                </div>
+
+                <div class="submit-section">
+                    <button class="btn-submit" id="submit-exam-btn">Submit Exam</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen" class="screen">
+        <div class="results-container">
+            <div class="results-header">
+                <h1>🎉 Exam Completed!</h1>
+                <p>Your NEET Mock Exam Results</p>
+            </div>
+
+            <div class="score-display">
+                <div class="score-circle">
+                    <svg viewBox="0 0 200 200">
+                        <circle cx="100" cy="100" r="90" class="score-bg"></circle>
+                        <circle cx="100" cy="100" r="90" class="score-fill" id="score-circle"></circle>
+                    </svg>
+                    <div class="score-text">
+                        <span class="score-value" id="score-percentage">0%</span>
+                        <span class="score-label">Score</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-summary">
+                <div class="result-card">
+                    <div class="result-icon">✓</div>
+                    <div class="result-label">Correct</div>
+                    <div class="result-value" id="correct-answers">0</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-icon">✗</div>
+                    <div class="result-label">Incorrect</div>
+                    <div class="result-value" id="incorrect-answers">0</div>
+                </div>
+                <div class="result-card">
+                    <div class="result-icon">○</div>
+                    <div class="result-label">Unattempted</div>
+                    <div class="result-value" id="unattempted-answers">0</div>
+                </div>
+                <div class="result-card highlight">
+                    <div class="result-icon">★</div>
+                    <div class="result-label">Total Marks</div>
+                    <div class="result-value" id="total-marks">0</div>
+                </div>
+            </div>
+
+            <div class="subject-wise-results">
+                <h3>Subject-wise Performance</h3>
+                <div class="subject-results-grid">
+                    <div class="subject-result">
+                        <h4>Physics</h4>
+                        <div class="subject-stats">
+                            <span>Correct: <strong id="physics-correct">0</strong></span>
+                            <span>Incorrect: <strong id="physics-incorrect">0</strong></span>
+                            <span>Marks: <strong id="physics-marks">0</strong></span>
+                        </div>
+                    </div>
+                    <div class="subject-result">
+                        <h4>Chemistry</h4>
+                        <div class="subject-stats">
+                            <span>Correct: <strong id="chemistry-correct">0</strong></span>
+                            <span>Incorrect: <strong id="chemistry-incorrect">0</strong></span>
+                            <span>Marks: <strong id="chemistry-marks">0</strong></span>
+                        </div>
+                    </div>
+                    <div class="subject-result">
+                        <h4>Biology</h4>
+                        <div class="subject-stats">
+                            <span>Correct: <strong id="biology-correct">0</strong></span>
+                            <span>Incorrect: <strong id="biology-incorrect">0</strong></span>
+                            <span>Marks: <strong id="biology-marks">0</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="results-actions">
+                <button class="btn-secondary" onclick="window.location.href='/predictions'">Back to Predictions</button>
+                <button class="btn-primary" id="view-solutions-btn">View Solutions</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Confirmation Modal -->
+    <div id="submit-modal" class="modal">
+        <div class="modal-content">
+            <h2>⚠️ Confirm Submission</h2>
+            <div class="modal-body">
+                <p>Are you sure you want to submit the exam?</p>
+                <div class="submission-summary">
+                    <p><strong>Answered:</strong> <span id="modal-answered">0</span></p>
+                    <p><strong>Not Answered:</strong> <span id="modal-not-answered">0</span></p>
+                    <p><strong>Marked for Review:</strong> <span id="modal-marked">0</span></p>
+                </div>
+                <p class="warning-text">⚠️ Once submitted, you cannot change your answers!</p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-secondary" id="cancel-submit-btn">Cancel</button>
+                <button class="btn-primary" id="confirm-submit-btn">Yes, Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Warning Modal -->
+    <div id="warning-modal" class="modal">
+        <div class="modal-content warning">
+            <h2>⚠️ Warning</h2>
+            <div class="modal-body">
+                <p id="warning-message"></p>
+            </div>
+            <div class="modal-actions">
+                <button class="btn-primary" id="warning-ok-btn">OK</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Pass exam data from Flask
+        const examData = {{ exam_data | tojson | safe }};
+    </script>
+    <script src="{{ url_for('static', filename='js/neet-exam.js') }}"></script>
+</body>
+</html>

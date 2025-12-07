@@ -1,0 +1,105 @@
+# Cloudflare Workers Configuration for VidyaTid
+# Copy this file to your Workers project root and rename to wrangler.toml
+
+name = "guruai-api"
+main = "src/index.js"
+compatibility_date = "2024-01-01"
+
+# Account details
+account_id = "YOUR_ACCOUNT_ID_HERE"
+
+# Workers configuration
+workers_dev = true
+
+# D1 Database binding
+[[d1_databases]]
+binding = "DB"  # Available as env.DB in your Worker
+database_name = "guruai-db"
+database_id = "YOUR_D1_DATABASE_ID_HERE"  # Get this from: wrangler d1 create guruai-db
+
+# Workers AI binding
+[ai]
+binding = "AI"  # Available as env.AI in your Worker
+
+# KV Namespace for caching
+[[kv_namespaces]]
+binding = "KV"  # Available as env.KV in your Worker
+id = "YOUR_KV_NAMESPACE_ID_HERE"  # Get this from: wrangler kv:namespace create "guruai-cache"
+
+# R2 Bucket for file storage
+[[r2_buckets]]
+binding = "R2"  # Available as env.R2 in your Worker
+bucket_name = "guruai-storage"
+
+# Environment variables
+[vars]
+ENVIRONMENT = "production"
+USE_CLOUDFLARE_AI = "true"
+USE_CLOUDFLARE_D1 = "true"
+
+# Secrets (set with: wrangler secret put SECRET_NAME)
+# - RAZORPAY_KEY_ID
+# - RAZORPAY_KEY_SECRET
+# - SENDGRID_API_KEY
+# - JWT_SECRET
+
+# Scheduled tasks (cron triggers)
+[triggers]
+crons = [
+  "0 0 * * *",    # Daily reset at midnight UTC
+  "0 * * * *",    # Hourly subscription expiration check
+  "0 0 1 * *"     # Monthly prediction reset on 1st of month
+]
+
+# Build configuration
+[build]
+command = "npm run build"
+
+# Development configuration
+[env.development]
+name = "guruai-api-dev"
+
+[[env.development.d1_databases]]
+binding = "DB"
+database_name = "guruai-db-dev"
+database_id = "YOUR_DEV_D1_DATABASE_ID_HERE"
+
+[[env.development.kv_namespaces]]
+binding = "KV"
+id = "YOUR_DEV_KV_NAMESPACE_ID_HERE"
+
+# Staging configuration
+[env.staging]
+name = "guruai-api-staging"
+
+[[env.staging.d1_databases]]
+binding = "DB"
+database_name = "guruai-db-staging"
+database_id = "YOUR_STAGING_D1_DATABASE_ID_HERE"
+
+[[env.staging.kv_namespaces]]
+binding = "KV"
+id = "YOUR_STAGING_KV_NAMESPACE_ID_HERE"
+
+# Production configuration
+[env.production]
+name = "guruai-api"
+workers_dev = false
+
+[[env.production.d1_databases]]
+binding = "DB"
+database_name = "guruai-db"
+database_id = "YOUR_PROD_D1_DATABASE_ID_HERE"
+
+[[env.production.kv_namespaces]]
+binding = "KV"
+id = "YOUR_PROD_KV_NAMESPACE_ID_HERE"
+
+[[env.production.r2_buckets]]
+binding = "R2"
+bucket_name = "guruai-storage"
+
+# Routes (custom domain)
+[[env.production.routes]]
+pattern = "api.vidyatid.com/*"
+zone_name = "vidyatid.com"

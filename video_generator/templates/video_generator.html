@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>GuruAI Video Generator - 2D Animated Explainer Videos</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎬</text></svg>">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='video_generator.css') }}">
+</head>
+<body>
+    <!-- Background Effects -->
+    <div class="background-effects">
+        <div class="gradient-orb orb-1"></div>
+        <div class="gradient-orb orb-2"></div>
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="/" class="nav-logo">
+                <div class="logo-icon">🎓</div>
+                <span class="logo-text">GuruAI</span>
+            </a>
+            <div class="nav-actions">
+                <a href="/" class="btn-nav">← Home</a>
+                <a href="/tutor" class="btn-nav-secondary">AI Tutor</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <div class="generator-container">
+            <!-- Header -->
+            <div class="generator-header">
+                <div class="header-icon">🎬</div>
+                <h1>2D Animated Explainer Videos</h1>
+                <p>Generate educational videos from NCERT content using AI</p>
+            </div>
+
+            <!-- Generator Form -->
+            <div class="generator-form">
+                <div class="form-section">
+                    <label for="topic-input">Topic</label>
+                    <input 
+                        type="text" 
+                        id="topic-input" 
+                        class="form-input"
+                        placeholder="Enter topic: DNA Replication, Newton's Laws, Chemical Bonding..."
+                    >
+                </div>
+
+                <div class="form-row">
+                    <div class="form-section">
+                        <label for="subject-select">Subject</label>
+                        <select id="subject-select" class="form-select">
+                            <option value="">Auto-detect</option>
+                            <option value="Physics">⚛️ Physics</option>
+                            <option value="Chemistry">⚗️ Chemistry</option>
+                            <option value="Biology">🧬 Biology</option>
+                            <option value="Maths">📐 Mathematics</option>
+                        </select>
+                    </div>
+
+                    <div class="form-section">
+                        <label for="duration-input">Duration (seconds)</label>
+                        <input 
+                            type="number" 
+                            id="duration-input" 
+                            class="form-input"
+                            placeholder="Auto (60-300)"
+                            min="30"
+                            max="600"
+                        >
+                    </div>
+                </div>
+
+                <div class="form-actions">
+                    <button id="preview-btn" class="btn-secondary">
+                        <span class="btn-icon">👁️</span>
+                        Preview Script
+                    </button>
+                    <button id="generate-btn" class="btn-primary">
+                        <span class="btn-icon">🎬</span>
+                        Generate Video
+                    </button>
+                </div>
+            </div>
+
+            <!-- Quick Topics -->
+            <div class="quick-topics">
+                <h3>Quick Topics</h3>
+                <div class="topics-grid" id="topics-grid">
+                    <!-- Populated by JavaScript -->
+                </div>
+            </div>
+
+            <!-- Status Section -->
+            <div id="status-section" class="status-section hidden">
+                <div class="status-card">
+                    <div class="status-icon" id="status-icon">⏳</div>
+                    <div class="status-content">
+                        <h3 id="status-title">Processing...</h3>
+                        <p id="status-message">Please wait while we generate your video</p>
+                        <div class="progress-bar" id="progress-bar">
+                            <div class="progress-fill" id="progress-fill"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Script Preview -->
+            <div id="script-preview" class="script-preview hidden">
+                <div class="preview-header">
+                    <h3>📝 Script Preview</h3>
+                    <button id="close-preview" class="btn-close">×</button>
+                </div>
+                <div class="preview-content" id="preview-content">
+                    <!-- Script content here -->
+                </div>
+            </div>
+
+            <!-- Result Section -->
+            <div id="result-section" class="result-section hidden">
+                <div class="result-card">
+                    <div class="result-header">
+                        <h3>🎉 Video Generated!</h3>
+                    </div>
+                    <div class="result-content">
+                        <div class="video-info">
+                            <p><strong>Topic:</strong> <span id="result-topic"></span></p>
+                            <p><strong>Duration:</strong> <span id="result-duration"></span></p>
+                            <p><strong>Scenes:</strong> <span id="result-scenes"></span></p>
+                        </div>
+                        <div class="result-actions">
+                            <a id="download-link" href="#" class="btn-primary" download>
+                                <span class="btn-icon">⬇️</span>
+                                Download Video
+                            </a>
+                            <button id="new-video-btn" class="btn-secondary">
+                                <span class="btn-icon">➕</span>
+                                Create Another
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Generated Videos List -->
+            <div class="videos-section">
+                <h3>📁 Generated Videos</h3>
+                <div class="videos-list" id="videos-list">
+                    <p class="empty-message">No videos generated yet</p>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="{{ url_for('static', filename='video_generator.js') }}"></script>
+</body>
+</html>

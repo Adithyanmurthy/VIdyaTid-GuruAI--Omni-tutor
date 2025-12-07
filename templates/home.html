@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidyaTid - Your AI Study Partner for JEE & NEET</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/home.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Orbitron:wght@400;500;600;700;800;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user-profile-dropdown.css') }}">
+</head>
+<body>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-brand">
+                <img class="logo" src="{{ url_for('static', filename='VidyaTid Logo Sq.png') }}" alt="VidyaTid Logo" width="40" height="40" style="border-radius: 50%;">
+                <span class="brand-name">VidyaTid</span>
+            </div>
+            <div class="nav-links" id="nav-links">
+                <a href="#features">Features</a>
+                <a href="#how-it-works">How It Works</a>
+                <a href="#pricing">Pricing</a>
+                <a href="/video">Video Generator</a>
+                <a href="/predictions">AI Predictions</a>
+                <!-- User Profile Dropdown -->
+                <div class="user-menu-container">
+                    <!-- Show login button when not logged in -->
+                    <a href="/auth" class="login-btn" id="login-btn">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+                        Login
+                    </a>
+                    <!-- Show profile dropdown when logged in (hidden by default) -->
+                    <div class="user-profile-dropdown hidden" id="user-profile-dropdown">
+                        <button class="profile-trigger" id="profile-trigger">
+                            <img src="{{ url_for('static', filename='VidyaTid Logo Sq.png') }}" alt="User Avatar" class="user-avatar" id="user-avatar">
+                            <span class="user-name" id="user-name">User</span>
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                        </button>
+                        <div class="dropdown-menu" id="dropdown-menu">
+                            <div class="dropdown-header">
+                                <img src="{{ url_for('static', filename='VidyaTid Logo Sq.png') }}" alt="User Avatar" class="dropdown-avatar">
+                                <div class="dropdown-user-info">
+                                    <span class="dropdown-username" id="dropdown-username">User</span>
+                                    <span class="dropdown-email" id="dropdown-email">user@example.com</span>
+                                </div>
+                            </div>
+                            <div class="dropdown-divider"></div>
+                            <a href="/chat" class="dropdown-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                                Chat
+                            </a>
+                            <a href="/profile" class="dropdown-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                My Profile
+                            </a>
+                            <a href="/progress" class="dropdown-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+                                My Progress
+                            </a>
+                            <a href="/settings" class="dropdown-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H1m18.2 5.2l-4.2-4.2m0-6l4.2-4.2"></path></svg>
+                                Settings
+                            </a>
+                            <a href="/pricing" class="dropdown-item">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                                Pricing
+                            </a>
+                            <div class="dropdown-divider"></div>
+                            <a href="#" class="dropdown-item" id="logout-btn">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                Logout
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section with Animated Banner -->
+    <section class="hero">
+        <!-- Animated Background Illustration -->
+        <div class="hero-animation">
+            <svg class="animated-svg" viewBox="0 0 1200 600" xmlns="http://www.w3.org/2000/svg">
+                <!-- Animated Globe with India Highlight -->
+                <g class="globe-group" transform="translate(950, 200)">
+                    <!-- Globe Background -->
+                    <circle class="globe-bg" cx="0" cy="0" r="100" fill="url(#globeGradient)"/>
+                    
+                     -->
+                    <defs>
+                        <radialGradient id="globeGradient" cx="30%" cy="30%">
+                            <stop offset="0%" style="stop-color:rgba(59, 130, 246, 0.15);stop-opacity:1" />
+                            <stop offset="100%" style="stop-color:rgba(59, 130, 246, 0.05);stop-opacity:1" />
+                    
+                        <linearGradient id="">
+                            <stop offset="0%" style="stop-color:#ff9933;stop-opacity:1" />
+                            <stop offset="50%" style="stop-color:#ffffff;stop-opacity:0.9" />
+                            <stop offset="100%" style="stop-color:#138808;stop-opacity:1" />
+                    t>
+                    </defs>
+                    
+                    <!-- Globe Circle -->
+                    4"/>
+                    
+                    <!-- Latitude Lines -->
+                    <ellipse class="lat-line lat-1" cx="0" cy="-50" rx="100" ry="15" fill="none" stroke="#3b82f6" s"/>
+                    "/>
+                .3"/>
+                    <ellipse class="lat-25"/>
+                    <ellipse class="l/>
+                    
+                    <!-- Longitude Lines -->
+                    <ellipse class="long-line long-1" cx="0" cy="0" rx="25" ry="100" fill="none" stroke="#3b82"0.25"/>
+                    <ellipse class="long-line long-2" cx="0" cy="0" rx="50" ry="100" fill="none" stroke="#8b5c
+                    <ellipse class="long-line long-3" cx="0" cy="0" rx="75" ry="100" fill="none" stroke="#3b82
+                    <line class="long-line long-4" x1="0" y1="-100" x2="0" y2="100" stroke="#8b5cf6" stroke-wi"/>
+                    
+                    <!-- Accurate India Map -->
+                    2)">
+                
+                        <path class="in d="
+                            M 0,-35
+                            L 3,-32 L 6,-28 L 8,-24
+                            L 10,-20 L 12,-15
+                            L 14,-10 L 15,-5
+                    6,5
+                
+                            L 12,20 L 4
+                            L 8,27 L 6,29
+                            L 3,30 L 0,30
+                            L -3,29 L -6,27
+                            L -8,24 L -10,20
+                            L -11,15 L -12,10
+                    5 L -11,0
+                 L -9,-10
+                            L -7,-15 L -5,20
+                            L -3,-25 L -1,-30
+                            Z
+                        " fill="url(#indiaGradient)" opacity="0.9" stroke="#ff9933" stroke-width="1.5"/>
+                   
+                        <!-- Kashmir Re->
+                        <path class="kashm"0.8"/>
+                        
+                        <!-- Andaman & Nicobar (Small dots) -->
+                        <circle class="andaman" cx="20" cy="15" r="1.5" fill="#ff997"/>
+                    />
+                "/>
+                        
+                        <!-- Lakshadw>
+                        <circle class="lakshadweep" cx="-18" cy="8" r="0.8" fill="#ff9933" opacity="0.7"/>
+                        <circle class="lakshadweep" cx="-19" cy="10" r="0.6" fill="#ff9933" opacity="0.7"/>
+                    </g>
+                    
+                    <!-- Capital Marker () -->
+                    <g class="capital-marker" transform="translate(10, -20)">
+                        <circle class="capital-dot" cx="0" cy="0" r="2.5" fill="#fbbf24"/>
+                        <circle class="capital-pulse-1" cx="0" cy="0" r="2.5" fill="none" stroke="#fbbf24" stroke-wh="2"/>
+                  5"/>
+              
+  
+                    <!-- Connectio
+                    <line class="con"0.3"/>
+                    <line class="connection-line 
+                    <line class="connection-line line-3" x1="1"/>
+                    
+            >
+                    <circle class="
+                    <circle class="satellite "/>
+                    <circle class="satellite sat-3" cx="-85" 
+                </g>"/>8b5cf6ll="# fir="2.5"="85" cy2f6ll="#3b8fi" 5" r="2." cy="85="85t-2" cxsa>"#fbbf24"/"3" fill=r=cy="-120" "  cx="0" sat-1satellitetes -- Satelli- Orbiting<!-        ="0.3 opacity"1"idth= stroke-w6d4"roke="#06b st"="6060" y2" x2="" y1="155="0.3"/>opacityh="1" widtke-tro"#8b5cf6" soke=" str0" y2="0"0" x2="81=" y2" x1="15ine-l1" opacity=idth="ke-wf6" stroe="#3b82" strok" y2="-602="60"-15" x5" y1=" x1="1e line-1on-lintinec>e --be Edgndia to Glones from In Li                   </g>     dth="1." stroke-wif9933stroke="#fne" "noll=="2.5" fi"0" ry=cx="0" c" -2pulsel-s="capitae clasircl   <c   idthiDeldots) --l eep (Smal0.7="pacity933" o="#ff92" fill" r="1.y="21"22" cn" cx=dama="ancircle class    <    ty="0.7"" opaci"#ff9933= fillr="1" cy="18" " cx="21"manlass="anda c   <circle y="0.pacit" o33ty=" opaci9933"#ff fill= L 1,-36 Z",-35 L 2,-33r" d="M 0iion -g     -L -10,-5             -12,   L     ,2101510 L 14,      L 15,       L 116,0        L dia-map" -->urate)Accape (More  ShMain India    <!--     e(1.scal15) nslate(15, -"trasform=p" tranrou-gndia-maps="i<g claspacity="0.3="1" odth.25"/>ty="08" opaciidth="0.e-w6" strokf/>city="0.3"pa1" o-width="f6" stroke=pacity" oh="0.8e-widttrokf6" s25"ty="0."0.8" opaciidth=oke-wb82f6" str="#3strokee" " fill="non="15" ry="100cy="50" rx cx="0"  lat-5"-lineaty="0.0.8" opacit"width=6" stroke-ke="#3b82ftronone" s" fill="2000" ry="x="1 cy="25" r cx="0"t-4"line laity="0"1" opacke-width=6" stro5cf="#8bne" stroke"no=" fill"25ry=="100" 0" rx"0" cy="-3" cx=atne ls="lat-lilipse clas    <elcity="0.25" opawidth="0.8troke-"#3b82f6" s" stroke=e"non fill=y="20""100" r"-25" rx=cx="0" cy=lat-2" -line class="lat<ellipse 
+                
+                <!-- Particle System -->
+                <g class="particles">
+                    <circle class="particle particle-1" cx="100" cy="100" r="2" fill="#3b82f6" opacity="0.6"/>
+                    <circle class="particle particle-2" cx="300" cy="150" r="2" fill="#8b5cf6" opacity="0.6"/>
+                    <circle class="particle particle-3" cx="500" cy="200" r="2" fill="#06b6d4" opacity="0.6"/>
+                    <circle class="particle particle-4" cx="700" cy="250" r="2" fill="#ec4899" opacity="0.6"/>
+                    <circle class="particle particle-5" cx="200" cy="400" r="2" fill="#f59e0b" opacity="0.6"/>
+                    <circle class="particle particle-6" cx="400" cy="450" r="2" fill="#10b981" opacity="0.6"/>
+                    <circle class="particle particle-7" cx="600" cy="350" r="2" fill="#3b82f6" opacity="0.6"/>
+                    <circle class="particle particle-8" cx="800" cy="400" r="2" fill="#8b5cf6" opacity="0.6"/>
+                </g>
+                
+                <!-- Floating Books -->
+                <g class="books-group">
+                    <rect class="book book-1" x="150" y="200" width="100" height="15" rx="2" fill="#3b82f6"/>
+                    <rect class="book book-2" x="160" y="180" width="100" height="15" rx="2" fill="#8b5cf6"/>
+                    <rect class="book book-3" x="155" y="160" width="100" height="15" rx="2" fill="#06b6d4"/>
+                </g>
+                
+                <!-- Brain/AI Icon -->
+                <g class="brain-group">
+                    <circle class="brain-circle" cx="200" cy="450" r="40" fill="#3b82f6" opacity="0.2"/>
+                    <path class="brain-wave" d="M180,450 Q200,430 220,450" stroke="#3b82f6" stroke-width="3" fill="none"/>
+                    <circle class="brain-dot brain-dot-1" cx="190" cy="445" r="3" fill="#3b82f6"/>
+                    <circle class="brain-dot brain-dot-2" cx="210" cy="445" r="3" fill="#8b5cf6"/>
+                </g>
+                
+                <!-- Floating Formulas -->
+                <text class="formula formula-1" x="750" y="450" font-size="24" fill="#3b82f6" opacity="0.3">E=mc²</text>
+                <text class="formula formula-2" x="100" y="250" font-size="20" fill="#8b5cf6" opacity="0.3">F=ma</text>
+                <text class="formula formula-3" x="850" y="350" font-size="18" fill="#06b6d4" opacity="0.3">a²+b²=c²</text>
+                
+                <!-- Graduation Cap -->
+                <g class="grad-cap-group">
+                    <polygon class="grad-cap" points="1100,450 1070,465 1100,480 1130,465" fill="#3b82f6" opacity="0.6"/>
+                    <rect x="1098" y="480" width="4" height="25" fill="#8b5cf6" opacity="0.6"/>
+                    <circle cx="1100" cy="507" r="4" fill="#f59e0b" opacity="0.6"/>
+                </g>
+                
+                <!-- DNA Helix -->
+                <g class="dna-group">
+                    <path class="dna-strand-1" d="M100,550 Q120,530 140,550 T180,550" stroke="#ec4899" stroke-width="2" fill="none" opacity="0.4"/>
+                    <path class="dna-strand-2" d="M100,550 Q120,570 140,550 T180,550" stroke="#3b82f6" stroke-width="2" fill="none" opacity="0.4"/>
+                </g>
+                
+                <!-- Floating Circles -->
+                <circle class="float-circle float-circle-1" cx="100" cy="100" r="50" fill="#3b82f6" opacity="0.1"/>
+                <circle class="float-circle float-circle-2" cx="1100" cy="100" r="70" fill="#8b5cf6" opacity="0.1"/>
+                <circle class="float-circle float-circle-3" cx="600" cy="550" r="60" fill="#06b6d4" opacity="0.1"/>
+            </svg>
+        </div>
+
+        <div class="hero-content">
+            <div class="hero-badge">
+                <span class="badge-icon">✨</span>
+                <span>Welcome to the Future of Learning</span>
+            </div>
+            
+            <h1 class="hero-title">
+                Your AI Study Partner for<br>
+                <span class="gradient-text">JEE & NEET</span>
+            </h1>
+            
+            <p class="hero-description">
+                Get instant answers, solve problems, and ace your exams with AI-powered learning. 
+                100% NCERT-based, completely free to start.
+            </p>
+            
+            <div class="hero-cta">
+                <a href="/chat" class="btn-large btn-primary">
+                    Start Learning Free
+                    <span class="btn-arrow">→</span>
+                </a>
+                <button class="btn-large btn-secondary" onclick="scrollToDemo()">
+                    <span class="play-icon">▶</span>
+                    Watch Demo
+                </button>
+            </div>
+            
+            <p class="trust-indicators">
+                <span class="trust-item"><span class="check">✓</span> No credit card</span>
+                <span class="separator">•</span>
+                <span class="trust-item"><span class="check">✓</span> 10 free queries daily</span>
+                <span class="separator">•</span>
+                <span class="trust-item"><span class="check">✓</span> Start in 30 seconds</span>
+            </p>
+            
+            <div class="stats-row">
+                <div class="stat-card">
+                    <div class="stat-number">10K+</div>
+                    <div class="stat-label">Students</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">1M+</div>
+                    <div class="stat-label">Questions</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">98%</div>
+                    <div class="stat-label">Satisfaction</div>
+                </div>
+                <div class="stat-card">
+                    <div class="stat-number">2 Sec</div>
+                    <div class="stat-label">Response</div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+        <div class="container">
+            <div class="section-header">
+                <h2 class="section-title">Everything You Need to Ace Your Exams</h2>
+                <p class="section-subtitle">Comprehensive AI-powered tools designed specifically for JEE & NEET preparation</p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card">
+                    <div class="feature-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                    </div>
+                    <h3>Ask Anything</h3>
+                    <p>Get instant, detailed answers to any NCERT concept in Physics, Chemistry, Mathematics, or Biology. Our AI understands context and provides step-by-step explanations.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><circle cx="8.5" cy="8.5" r="1.5"></circle><polyline points="21 15 16 10 5 21"></polyline></svg>
+                    </div>
+                    <h3>Snap & Solve</h3>
+                    <p>Upload images of problems from your textbooks or worksheets. VidyaTid recognizes the question and provides complete solutions with detailed working.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                    </div>
+                    <h3>Practice Tests</h3>
+                    <p>Access 20 years of JEE Main, JEE Advanced, and NEET previous papers. Practice with real exam patterns and get instant feedback on your performance.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                    </div>
+                    <h3>Progress Tracking</h3>
+                    <p>Monitor your preparation journey with detailed analytics. Identify weak areas, track improvement, and get personalized recommendations.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="13 2 3 14 12 14 11 22 21 10 12 10 13 2"></polygon></svg>
+                    </div>
+                    <h3>Lightning Fast</h3>
+                    <p>No more waiting! Get answers in just 2-3 seconds. Our optimized AI infrastructure ensures you spend time learning, not waiting.</p>
+                </div>
+                
+                <div class="feature-card">
+                    <div class="feature-icon-large">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                    </div>
+                    <h3>NCERT Focused</h3>
+                    <p>Every answer is based on NCERT textbooks—the foundation of JEE & NEET. Stay aligned with the syllabus and exam patterns.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How VidyaTid Works</h2>
+            <p class="section-subtitle">Three simple steps to start your success journey</p>
+            
+            <div class="steps-grid">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Ask Your Question</h3>
+                    <p>Type your NCERT question or upload an image of the problem you're stuck on</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Get Instant Answer</h3>
+                    <p>Our AI analyzes and provides detailed, step-by-step explanations in 2-3 seconds</p>
+                </div>
+                
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Practice & Master</h3>
+                    <p>Test your understanding with adaptive quizzes and track your progress</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Pricing Section -->
+    <section id="pricing" class="pricing-section">
+        <div class="container">
+            <h2 class="section-title">Simple Pricing</h2>
+            <p class="section-subtitle">Start free, upgrade anytime</p>
+            
+            <!-- Current Plan (shown when logged in) -->
+            <div id="current-plan-banner" style="display: none; text-align: center; margin-bottom: 30px; padding: 20px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); border-radius: 12px; color: white;">
+                <p style="font-size: 14px; opacity: 0.9; margin-bottom: 5px;">Your Current Plan</p>
+                <h3 id="current-plan-name" style="font-size: 32px; margin: 5px 0;">Free</h3>
+                <p id="current-plan-details" style="font-size: 16px; opacity: 0.9;">10 queries per day</p>
+            </div>
+            
+            <div class="pricing-grid" style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px; max-width: 900px; margin: 0 auto;">
+                <!-- Premium Tier (Recommended) -->
+                <div class="pricing-card featured" data-tier="premium">
+                    <div class="popular-badge">⭐ Recommended</div>
+                    <h3>Premium</h3>
+                    <div class="price">₹299<span>/month</span></div>
+                    <ul class="features-list">
+                        <li><span class="check">✓</span> 200 queries/day</li>
+                        <li><span class="check">✓</span> Image solving</li>
+                        <li><span class="check">✓</span> Mock tests</li>
+                    </ul>
+                    <button class="btn-primary subscribe-btn" data-tier="premium" data-price="299">Upgrade</button>
+                </div>
+                
+                <!-- Ultimate Tier -->
+                <div class="pricing-card" data-tier="ultimate">
+                    <h3>Ultimate</h3>
+                    <div class="price">₹499<span>/month</span></div>
+                    <ul class="features-list">
+                        <li><span class="check">✓</span> Unlimited queries</li>
+                        <li><span class="check">✓</span> All features</li>
+                        <li><span class="check">✓</span> Priority support</li>
+                    </ul>
+                    <button class="btn-outline subscribe-btn" data-tier="ultimate" data-price="499">Upgrade</button>
+                </div>
+            </div>
+            
+            <p style="text-align: center; margin-top: 30px;">
+                <a href="/pricing" style="color: #667eea; text-decoration: none; font-size: 16px;">View all plans & features →</a>
+            </p>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <h2>Ready to Transform Your Preparation?</h2>
+            <p>Join 10,000+ students who are already acing their exams with VidyaTid</p>
+            <a href="/chat" class="btn-large btn-primary">Start Learning Free →</a>
+            <p class="cta-note">No credit card required • Start in 30 seconds</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div class="footer-col footer-brand">
+                    <h4>
+                        <img class="logo" src="{{ url_for('static', filename='VidyaTid Logo Sq.png') }}" alt="VidyaTid Logo" width="32" height="32" style="display: inline-block; vertical-align: middle; border-radius: 50%;">
+                        <span class="brand-gradient">VidyaTid</span>
+                    </h4>
+                    <p class="footer-description">Your AI-powered study partner for JEE & NEET preparation. Master concepts, practice smarter, and achieve your dreams.</p>
+                    <div class="footer-social">
+                        <a href="#" class="social-link" aria-label="Facebook">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Twitter">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M23.953 4.57a10 10 0 01-2.825.775 4.958 4.958 0 002.163-2.723c-.951.555-2.005.959-3.127 1.184a4.92 4.92 0 00-8.384 4.482C7.69 8.095 4.067 6.13 1.64 3.162a4.822 4.822 0 00-.666 2.475c0 1.71.87 3.213 2.188 4.096a4.904 4.904 0 01-2.228-.616v.06a4.923 4.923 0 003.946 4.827 4.996 4.996 0 01-2.212.085 4.936 4.936 0 004.604 3.417 9.867 9.867 0 01-6.102 2.105c-.39 0-.779-.023-1.17-.067a13.995 13.995 0 007.557 2.209c9.053 0 13.998-7.496 13.998-13.985 0-.21 0-.42-.015-.63A9.935 9.935 0 0024 4.59z"/></svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="Instagram">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zm0-2.163c-3.259 0-3.667.014-4.947.072-4.358.2-6.78 2.618-6.98 6.98-.059 1.281-.073 1.689-.073 4.948 0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98-1.281-.059-1.69-.073-4.949-.073zm0 5.838c-3.403 0-6.162 2.759-6.162 6.162s2.759 6.163 6.162 6.163 6.162-2.759 6.162-6.163c0-3.403-2.759-6.162-6.162-6.162zm0 10.162c-2.209 0-4-1.79-4-4 0-2.209 1.791-4 4-4s4 1.791 4 4c0 2.21-1.791 4-4 4zm6.406-11.845c-.796 0-1.441.645-1.441 1.44s.645 1.44 1.441 1.44c.795 0 1.439-.645 1.439-1.44s-.644-1.44-1.439-1.44z"/></svg>
+                        </a>
+                        <a href="#" class="social-link" aria-label="LinkedIn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433c-1.144 0-2.063-.926-2.063-2.065 0-1.138.92-2.063 2.063-2.063 1.14 0 2.064.925 2.064 2.063 0 1.139-.925 2.065-2.064 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                        </a>
+                    </div>
+                </div>
+                <div class="footer-col">
+                    <h4>Product</h4>
+                    <a href="#features">Features</a>
+                    <a href="#how-it-works">How It Works</a>
+                    <a href="#pricing">Pricing</a>
+                    <a href="/chat">Try Free</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Resources</h4>
+                    <a href="/progress">Progress Tracker</a>
+                    <a href="/search">Search</a>
+                    <a href="/question-paper">Question Papers</a>
+                    <a href="/settings">Settings</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Support</h4>
+                    <a href="#">Help Center</a>
+                    <a href="mailto:support@vidyatid.com">Contact Us</a>
+                    <a href="#">FAQ</a>
+                    <a href="#">Community</a>
+                </div>
+                <div class="footer-col">
+                    <h4>Legal</h4>
+                    <a href="#">Privacy Policy</a>
+                    <a href="#">Terms of Service</a>
+                    <a href="#">Refund Policy</a>
+                    <a href="#">Cookie Policy</a>
+                </div>
+            </div>
+            <div class="footer-divider"></div>
+            <div class="footer-bottom">
+                <div class="footer-bottom-left">
+                    <p>&copy; 2025 VidyaTid. Made with <span class="heart">❤️</span> for Indian Students</p>
+                    <p class="footer-tagline">Empowering 10,000+ students to achieve their dreams</p>
+                </div>
+                <div class="footer-bottom-right">
+                    <div class="team-credits">
+                        <p class="team-label">Created by:</p>
+                        <div class="team-names">
+                            <span class="team-member">Ajay Kumar T N</span>
+                            <span class="team-separator">•</span>
+                            <span class="team-member">Adithya N Murthy</span>
+                            <span class="team-separator">•</span>
+                            <span class="team-member">Abhishek Biradar</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/auth-check.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/user-profile-dropdown.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/globe-animation.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/home.js') }}"></script>
+</body>
+</html>

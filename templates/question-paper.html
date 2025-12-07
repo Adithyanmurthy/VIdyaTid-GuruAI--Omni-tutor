@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidyaTid - Question Paper Generator</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user-profile-dropdown.css') }}">
+</head>
+<body>
+
+    <header class="main-header">
+        <div class="header-content">
+            <a href="/" class="logo">
+                <img src="{{ url_for('static', filename='VidyaTid Logo Sq.png') }}" alt="VidyaTid Logo" width="40" height="40" style="border-radius: 50%;">
+                <span>VidyaTid</span>
+            </a>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="/">Chat</a></li>
+                    <li><a href="/progress">Progress</a></li>
+                    <li><a href="/search">Search</a></li>
+                    <li><a href="/question-paper" class="active">Question Papers</a></li>
+                    <li><a href="/predictions">AI Predictions</a></li>
+                    <li><a href="/settings">Settings</a></li>
+                    <li class="user-menu-container">
+                        <a href="/auth" class="login-btn" id="login-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+                            Login
+                        </a>
+                        <div class="user-profile-dropdown hidden" id="user-profile-dropdown">
+                            <button class="profile-trigger" id="profile-trigger">
+                                <img src="{{ url_for('static', filename='VidyaTid Logo Sq.png') }}" alt="User Avatar" class="user-avatar" id="user-avatar">
+                                <span class="user-name" id="user-name">User</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div class="dropdown-menu" id="dropdown-menu">
+                                <div class="dropdown-header">
+                                    <img src="{{ url_for('static', filename='VidyaTid Logo Sq.png') }}" alt="User Avatar" class="dropdown-avatar">
+                                    <div class="dropdown-user-info">
+                                        <span class="dropdown-username" id="dropdown-username">User</span>
+                                        <span class="dropdown-email" id="dropdown-email">user@example.com</span>
+                                    </div>
+                                </div>
+                                <div class="dropdown-divider"></div>
+                                <a href="/chat" class="dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                                    Chat
+                                </a>
+                                <a href="/profile" class="dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    My Profile
+                                </a>
+                                <a href="/progress" class="dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+                                    My Progress
+                                </a>
+                                <a href="/settings" class="dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H1m18.2 5.2l-4.2-4.2m0-6l4.2-4.2"></path></svg>
+                                    Settings
+                                </a>
+                                <a href="/pricing" class="dropdown-item">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                                    Pricing
+                                </a>
+                                <div class="dropdown-divider"></div>
+                                <a href="#" class="dropdown-item" id="logout-btn">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                    Logout
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="content-area">
+        <div class="question-paper-container">
+            <div class="qp-header">
+                <h1>Question Paper Generator</h1>
+                <p>Create custom practice tests based on your needs</p>
+            </div>
+
+            <!-- Paper Type Selection -->
+            <div class="paper-type-section">
+                <h2>Select Paper Type</h2>
+                <div class="paper-type-cards">
+                    <div class="paper-type-card" data-type="custom">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        </div>
+                        <h3>Custom Paper</h3>
+                        <p>Select specific topics and difficulty levels</p>
+                        <button class="select-type-btn">Create Custom</button>
+                    </div>
+                    <div class="paper-type-card" data-type="full-length">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20"></path><path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z"></path></svg>
+                        </div>
+                        <h3>Full-Length Test</h3>
+                        <p>Complete JEE/NEET exam simulation</p>
+                        <button class="select-type-btn">Create Full Test</button>
+                    </div>
+                    <div class="paper-type-card" data-type="previous">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        </div>
+                        <h3>Previous Papers</h3>
+                        <p>Practice with past year questions</p>
+                        <button class="select-type-btn">Browse Papers</button>
+                    </div>
+                    <div class="paper-type-card featured" data-type="ai-prediction">
+                        <div class="card-icon">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"></path><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                        </div>
+                        <span class="ai-badge">🤖 AI Powered</span>
+                        <h3>AI Predictions</h3>
+                        <p>Get AI-predicted papers based on 20 years analysis</p>
+                        <button class="select-type-btn">Get Predictions</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom Paper Configuration -->
+            <div id="custom-config" class="paper-config-section hidden">
+                <h2>Configure Your Paper</h2>
+                
+                <!-- Subject Selection -->
+                <div class="config-group">
+                    <h3>Select Subjects</h3>
+                    <div class="subject-checkboxes">
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="subject" value="Physics" checked>
+                            <span>Physics</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="subject" value="Chemistry" checked>
+                            <span>Chemistry</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="subject" value="Mathematics" checked>
+                            <span>Mathematics</span>
+                        </label>
+                        <label class="checkbox-label">
+                            <input type="checkbox" name="subject" value="Biology">
+                            <span>Biology</span>
+                        </label>
+                    </div>
+                </div>
+
+                <!-- Chapter/Topic Selection -->
+                <div class="config-group">
+                    <h3>Select Chapters/Topics</h3>
+                    <div id="chapter-selection" class="chapter-selection">
+                        <!-- Dynamically populated based on subject selection -->
+                    </div>
+                </div>
+
+                <!-- Difficulty Distribution -->
+                <div class="config-group">
+                    <h3>Difficulty Distribution</h3>
+                    <div class="difficulty-sliders">
+                        <div class="slider-group">
+                            <label>Easy: <span id="easy-value">30</span>%</label>
+                            <input type="range" id="easy-slider" min="0" max="100" value="30">
+                        </div>
+                        <div class="slider-group">
+                            <label>Medium: <span id="medium-value">50</span>%</label>
+                            <input type="range" id="medium-slider" min="0" max="100" value="50">
+                        </div>
+                        <div class="slider-group">
+                            <label>Hard: <span id="hard-value">20</span>%</label>
+                            <input type="range" id="hard-slider" min="0" max="100" value="20">
+                        </div>
+                    </div>
+                    <p class="difficulty-note">Total: <span id="total-percentage">100</span>%</p>
+                </div>
+
+                <!-- Question Count -->
+                <div class="config-group">
+                    <h3>Number of Questions</h3>
+                    <input type="number" id="question-count" min="5" max="100" value="30" class="question-count-input">
+                </div>
+
+                <!-- Generate Button -->
+                <div class="config-actions">
+                    <button id="generate-paper-btn" class="generate-btn">Generate Question Paper</button>
+                    <button id="cancel-config-btn" class="cancel-btn">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Full-Length Test Configuration -->
+            <div id="full-length-config" class="paper-config-section hidden">
+                <h2>Select Exam Type</h2>
+                <div class="exam-type-selection">
+                    <label class="radio-label">
+                        <input type="radio" name="exam-type" value="JEE-Main" checked>
+                        <span>JEE Main</span>
+                        <p class="exam-details">90 questions | 3 hours | Physics, Chemistry, Mathematics</p>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="exam-type" value="JEE-Advanced">
+                        <span>JEE Advanced</span>
+                        <p class="exam-details">54 questions | 3 hours | Physics, Chemistry, Mathematics</p>
+                    </label>
+                    <label class="radio-label">
+                        <input type="radio" name="exam-type" value="NEET">
+                        <span>NEET</span>
+                        <p class="exam-details">180 questions | 3 hours | Physics, Chemistry, Biology</p>
+                    </label>
+                </div>
+                <div class="config-actions">
+                    <button id="generate-full-test-btn" class="generate-btn">Generate Full-Length Test</button>
+                    <button id="cancel-full-test-btn" class="cancel-btn">Cancel</button>
+                </div>
+            </div>
+
+            <!-- Previous Papers Browser -->
+            <div id="previous-papers-browser" class="paper-config-section hidden">
+                <h2>Browse Previous Year Papers</h2>
+                <div class="previous-papers-filters">
+                    <select id="prev-exam-filter">
+                        <option value="">All Exams</option>
+                        <option value="JEE-Main">JEE Main</option>
+                        <option value="JEE-Advanced">JEE Advanced</option>
+                        <option value="NEET">NEET</option>
+                    </select>
+                    <select id="prev-year-filter">
+                        <option value="">All Years</option>
+                        <!-- Years will be populated dynamically -->
+                    </select>
+                    <select id="prev-subject-filter">
+                        <option value="">All Subjects</option>
+                        <option value="Physics">Physics</option>
+                        <option value="Chemistry">Chemistry</option>
+                        <option value="Mathematics">Mathematics</option>
+                        <option value="Biology">Biology</option>
+                    </select>
+                </div>
+                <div id="previous-papers-list" class="previous-papers-list">
+                    <!-- Previous papers will be listed here -->
+                </div>
+                <button id="cancel-previous-btn" class="cancel-btn">Back</button>
+            </div>
+
+            <!-- AI Prediction Configuration -->
+            <div id="ai-prediction-config" class="paper-config-section hidden">
+                <div class="prediction-header">
+                    <h2>🤖 AI-Powered Question Paper Prediction</h2>
+                    <p class="prediction-subtitle">Based on 20 years of NEET analysis with 75-85% accuracy</p>
+                </div>
+
+                <!-- Prediction Options -->
+                <div class="prediction-options">
+                    <div class="prediction-option-card">
+                        <h3>Subject-wise Prediction</h3>
+                        <p>Get AI predictions for a specific subject (NEET 2026 Pattern)</p>
+                        <select id="prediction-subject" class="prediction-select">
+                            <option value="Physics">Physics (45 questions)</option>
+                            <option value="Chemistry">Chemistry (45 questions)</option>
+                            <option value="Biology">Biology (90 questions)</option>
+                        </select>
+                        <select id="prediction-year" class="prediction-select">
+                            <option value="2026">NEET 2026</option>
+                            <option value="2027">NEET 2027</option>
+                            <option value="2028">NEET 2028</option>
+                        </select>
+                        <button id="generate-subject-prediction-btn" class="generate-btn">
+                            Generate Subject Prediction
+                        </button>
+                    </div>
+
+                    <div class="prediction-option-card featured">
+                        <span class="premium-badge">⭐ Premium</span>
+                        <h3>Complete NEET Prediction</h3>
+                        <p>Full 200-question predicted paper for all subjects</p>
+                        <select id="complete-prediction-year" class="prediction-select">
+                            <option value="2026">NEET 2026</option>
+                            <option value="2027">NEET 2027</option>
+                            <option value="2028">NEET 2028</option>
+                        </select>
+                        <button id="generate-complete-prediction-btn" class="generate-btn">
+                            Generate Complete Prediction
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Prediction Insights -->
+                <div class="prediction-insights">
+                    <h3>📊 Prediction Insights</h3>
+                    <div class="insights-grid" id="insights-grid">
+                        <div class="insight-card">
+                            <h4>Chapter Analysis</h4>
+                            <p>Loading...</p>
+                        </div>
+                        <div class="insight-card">
+                            <h4>Accuracy Track Record</h4>
+                            <p>Our predictions: 75-85% accurate</p>
+                        </div>
+                        <div class="insight-card">
+                            <h4>High Probability Topics</h4>
+                            <p>Loading...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <button id="cancel-prediction-btn" class="cancel-btn">Back</button>
+            </div>
+
+            <!-- Generated Paper Display -->
+            <div id="generated-paper" class="generated-paper-section hidden">
+                <div class="paper-header">
+                    <h2 id="paper-title">Question Paper</h2>
+                    <div class="paper-actions">
+                        <button id="download-paper-btn" class="action-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                            Download
+                        </button>
+                        <button id="print-paper-btn" class="action-btn">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"></polyline><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"></path><rect x="6" y="14" width="12" height="8"></rect></svg>
+                            Print
+                        </button>
+                        <button id="start-test-btn" class="action-btn primary">Start Test</button>
+                    </div>
+                </div>
+                <div id="paper-content" class="paper-content">
+                    <!-- Questions will be displayed here -->
+                </div>
+                <button id="new-paper-btn" class="new-paper-btn">Generate New Paper</button>
+            </div>
+
+            <!-- Test Interface -->
+            <div id="test-interface" class="test-interface hidden">
+                <div class="test-header">
+                    <h2 id="test-title">Test in Progress</h2>
+                    <div class="test-timer">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        <span id="timer-display">03:00:00</span>
+                    </div>
+                </div>
+                <div class="test-content">
+                    <div class="question-navigator">
+                        <h3>Questions</h3>
+                        <div id="question-grid" class="question-grid">
+                            <!-- Question numbers will be displayed here -->
+                        </div>
+                        <div class="navigator-legend">
+                            <div class="legend-item">
+                                <span class="legend-box answered"></span>
+                                <span>Answered</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-box marked"></span>
+                                <span>Marked</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-box unanswered"></span>
+                                <span>Not Answered</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="question-display">
+                        <div id="current-question" class="current-question">
+                            <!-- Current question will be displayed here -->
+                        </div>
+                        <div class="question-controls">
+                            <button id="mark-review-btn" class="control-btn">Mark for Review</button>
+                            <button id="clear-response-btn" class="control-btn">Clear Response</button>
+                            <div class="navigation-btns">
+                                <button id="prev-question-btn" class="nav-btn">Previous</button>
+                                <button id="next-question-btn" class="nav-btn">Next</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="test-actions">
+                    <button id="submit-test-btn" class="submit-btn">Submit Test</button>
+                </div>
+            </div>
+
+            <!-- Results Display -->
+            <div id="test-results" class="test-results hidden">
+                <div class="results-header">
+                    <h2>Test Results</h2>
+                    <div class="score-display">
+                        <div class="score-circle">
+                            <span id="score-percentage">0%</span>
+                        </div>
+                        <p id="score-text">0 / 0 Correct</p>
+                    </div>
+                </div>
+                <div class="results-summary">
+                    <div class="summary-card">
+                        <h3>Correct</h3>
+                        <p id="correct-count">0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Incorrect</h3>
+                        <p id="incorrect-count">0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Unattempted</h3>
+                        <p id="unattempted-count">0</p>
+                    </div>
+                    <div class="summary-card">
+                        <h3>Time Taken</h3>
+                        <p id="time-taken">0:00:00</p>
+                    </div>
+                </div>
+                <div class="results-actions">
+                    <button id="view-solutions-btn" class="action-btn primary">View Solutions</button>
+                    <button id="retry-test-btn" class="action-btn">Retry Test</button>
+                    <button id="back-to-generator-btn" class="action-btn">Back to Generator</button>
+                </div>
+                <div id="solutions-display" class="solutions-display hidden">
+                    <!-- Detailed solutions will be displayed here -->
+                </div>
+            </div>
+
+            <!-- Loading Indicator -->
+            <div id="qp-loading" class="loading-container hidden">
+                <div class="spinner"></div>
+                <p>Generating your question paper...</p>
+            </div>
+        </div>
+    </main>
+
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>For any issues or support, please email us at:</p>
+                <a href="mailto:support@vidyatid.com">support@vidyatid.com</a>
+            </div>
+            <div class="footer-section">
+                <h4>Meet the Team</h4>
+                <div class="team-members">
+                    <div class="team-member">
+                        <p>Ajay Kumar T N</p>
+                        <span>Lead</span>
+                    </div>
+                    <div class="team-member">
+                        <p>Adithya N Murthy</p>
+                        <span>AI Specialist</span>
+                    </div>
+                     <div class="team-member">
+                        <p>Abhishek Biradar</p>
+                        <span>UI/UX Designer</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="footer-bottom">
+            <p>&copy; 2025 VidyaTid. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/auth-check.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/user-profile-dropdown.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/feature-gate.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/question-paper.js') }}"></script>
+    <script>
+        // Protect question paper page - requires Starter or higher
+        document.addEventListener('DOMContentLoaded', async function() {
+            const hasAccess = await window.featureGate.protectPage('question_paper');
+            if (!hasAccess) {
+                // Hide content while showing upgrade modal
+                document.querySelector('.question-paper-container').style.opacity = '0.3';
+                document.querySelector('.question-paper-container').style.pointerEvents = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

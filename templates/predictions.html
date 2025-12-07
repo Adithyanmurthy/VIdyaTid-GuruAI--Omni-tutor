@@ -1,0 +1,609 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VidyaTid - AI Predictions</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/predictions.css') }}">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Orbitron:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/user-profile-dropdown.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.9.1/dist/chart.min.js"></script>
+</head>
+<body>
+
+    <!-- Header with Navigation -->
+    <header class="main-header">
+        <div class="header-content">
+            <a href="/" class="logo" aria-label="VidyaTid Home">
+                <img src="{{ url_for('static', filename='VidyaTid Logo Sq.png') }}" alt="VidyaTid Logo" width="40" height="40" style="border-radius: 50%;">
+                <span>VidyaTid</span>
+            </a>
+            <nav class="main-nav" role="navigation" aria-label="Main navigation">
+                <ul role="menubar">
+                    <li role="none"><a href="/" role="menuitem">Chat</a></li>
+                    <li role="none"><a href="/progress" role="menuitem">Progress</a></li>
+                    <li role="none"><a href="/search" role="menuitem">Search</a></li>
+                    <li role="none"><a href="/question-paper" role="menuitem">Question Papers</a></li>
+                    <li role="none"><a href="/predictions" class="active" role="menuitem" aria-current="page">AI Predictions</a></li>
+                    <li role="none"><a href="/settings" role="menuitem">Settings</a></li>
+                    <li class="user-menu-container" role="none">
+                        <a href="/auth" class="login-btn" id="login-btn" aria-label="Login to your account">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M15 3h4a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2h-4"></path><polyline points="10 17 15 12 10 7"></polyline><line x1="15" y1="12" x2="3" y2="12"></line></svg>
+                            Login
+                        </a>
+                        <div class="user-profile-dropdown hidden" id="user-profile-dropdown">
+                            <button class="profile-trigger" id="profile-trigger" aria-label="User menu" aria-expanded="false" aria-haspopup="true">
+                                <img src="{{ url_for('static', filename='VidyaTid Logo Sq.png') }}" alt="User Avatar" class="user-avatar" id="user-avatar">
+                                <span class="user-name" id="user-name">User</span>
+                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="6 9 12 15 18 9"></polyline></svg>
+                            </button>
+                            <div class="dropdown-menu" id="dropdown-menu" role="menu" aria-label="User menu options">
+                                <div class="dropdown-header">
+                                    <img src="{{ url_for('static', filename='VidyaTid Logo Sq.png') }}" alt="User Avatar" class="dropdown-avatar">
+                                    <div class="dropdown-user-info">
+                                        <span class="dropdown-username" id="dropdown-username">User</span>
+                                        <span class="dropdown-email" id="dropdown-email">user@example.com</span>
+                                    </div>
+                                </div>
+                                <div class="dropdown-divider" role="separator"></div>
+                                <a href="/chat" class="dropdown-item" role="menuitem">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>
+                                    Chat
+                                </a>
+                                <a href="/profile" class="dropdown-item" role="menuitem">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>
+                                    My Profile
+                                </a>
+                                <a href="/progress" class="dropdown-item" role="menuitem">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M18 20V10M12 20V4M6 20v-6"></path></svg>
+                                    My Progress
+                                </a>
+                                <a href="/settings" class="dropdown-item" role="menuitem">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><circle cx="12" cy="12" r="3"></circle><path d="M12 1v6m0 6v6m5.2-13.2l-4.2 4.2m0 6l4.2 4.2M23 12h-6m-6 0H1m18.2 5.2l-4.2-4.2m0-6l4.2-4.2"></path></svg>
+                                    Settings
+                                </a>
+                                <a href="/pricing" class="dropdown-item" role="menuitem">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><rect x="2" y="7" width="20" height="14" rx="2" ry="2"></rect><path d="M16 21V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v16"></path></svg>
+                                    Pricing
+                                </a>
+                                <div class="dropdown-divider" role="separator"></div>
+                                <a href="#" class="dropdown-item" id="logout-btn" role="menuitem" aria-label="Logout from your account">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path><polyline points="16 17 21 12 16 7"></polyline><line x1="21" y1="12" x2="9" y2="12"></line></svg>
+                                    Logout
+                                </a>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <main class="content-area" role="main">
+        <div class="predictions-container">
+            <!-- Page Header with Breadcrumb -->
+            <div class="predictions-header">
+                <nav class="breadcrumb" aria-label="Breadcrumb">
+                    <ol>
+                        <li><a href="/">Home</a></li>
+                        <li><span aria-current="page">AI Predictions</span></li>
+                    </ol>
+                </nav>
+                <h1>🤖 AI-Powered NEET Predictions</h1>
+                <p class="header-description">
+                    Get intelligent predictions based on 20 years of NEET analysis. 
+                    Our AI identifies high-probability topics with 75-85% accuracy to help you focus your preparation.
+                </p>
+            </div>
+
+            <!-- Prediction Dashboard (Subtask 3.2) -->
+            <div class="prediction-dashboard">
+                <h2 class="section-title">Prediction Features</h2>
+                <div class="feature-cards-grid" role="region" aria-label="Prediction features">
+                    <div class="feature-card" data-action="subject-prediction">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                        </div>
+                        <h3>Subject-wise Prediction</h3>
+                        <p>Generate AI-predicted papers for Physics, Chemistry, or Biology with confidence scores</p>
+                        <button class="feature-btn" data-action="subject-prediction" aria-label="Generate subject-wise prediction">Generate Prediction</button>
+                    </div>
+
+                    <div class="feature-card" data-action="chapter-analysis">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 3v18h18"></path><path d="M18.7 8l-5.1 5.2-2.8-2.7L7 14.3"></path></svg>
+                        </div>
+                        <h3>Chapter Analysis</h3>
+                        <p>View probability scores for each chapter and identify high-priority topics</p>
+                        <button class="feature-btn" data-action="chapter-analysis" aria-label="View chapter analysis">View Analysis</button>
+                    </div>
+
+                    <div class="feature-card featured premium-locked" data-action="complete-neet">
+                        <span class="premium-badge" aria-label="Premium feature">Premium Required</span>
+                        <div class="lock-overlay">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                        </div>
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"></path><polyline points="22 4 12 14.01 9 11.01"></polyline></svg>
+                        </div>
+                        <h3>Complete NEET Paper</h3>
+                        <p>Full 200-question predicted paper following exact NEET pattern</p>
+                        <button class="feature-btn premium-btn" data-action="complete-neet" disabled aria-label="Premium feature - Upgrade required">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="11" width="18" height="11" rx="2" ry="2"></rect>
+                                <path d="M7 11V7a5 5 0 0 1 10 0v4"></path>
+                            </svg>
+                            Upgrade to Unlock
+                        </button>
+                    </div>
+
+                    <div class="feature-card" data-action="prediction-insights">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                        </div>
+                        <h3>Prediction Insights</h3>
+                        <p>Detailed analysis and trends from historical NEET papers</p>
+                        <button class="feature-btn" data-action="prediction-insights" aria-label="View prediction insights">View Insights</button>
+                    </div>
+
+                    <div class="feature-card" data-action="smart-paper">
+                        <div class="feature-icon" aria-hidden="true">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+                        </div>
+                        <h3>Smart Paper</h3>
+                        <p>Personalized practice papers targeting your weak areas and focus chapters</p>
+                        <button class="feature-btn" data-action="smart-paper" aria-label="Generate smart paper">Generate Smart Paper</button>
+                    </div>
+                </div>
+
+                <!-- Quick Actions -->
+                <div class="quick-access">
+                    <h3>Quick Actions</h3>
+                    <div class="quick-buttons">
+                        <button class="quick-btn" data-action="latest-prediction" aria-label="View latest prediction">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M20.24 12.24a6 6 0 0 0-8.49-8.49L5 10.5V19h8.5z"></path><line x1="16" y1="8" x2="2" y2="22"></line><line x1="17" y1="15" x2="9" y2="15"></line></svg>
+                            Latest Prediction
+                        </button>
+                        <button class="quick-btn" data-action="high-probability" aria-label="View high probability topics">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"></polyline></svg>
+                            High Probability Topics
+                        </button>
+                        <button class="quick-btn" data-action="accuracy-report" aria-label="View accuracy report">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>
+                            Accuracy Report
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Predictions -->
+                <div class="recent-predictions">
+                    <h3>Recent Predictions</h3>
+                    <div class="recent-list" id="recent-predictions-list">
+                        <p class="empty-state">No recent predictions. Generate your first prediction above!</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Subject-wise Prediction Panel (Subtask 3.3) -->
+            <div class="prediction-panel" id="subject-prediction-panel">
+                <div class="panel-header">
+                    <h2>Subject-wise Prediction</h2>
+                    <p>Generate AI-predicted papers for individual subjects</p>
+                </div>
+                <div class="panel-content">
+                    <form class="prediction-form" id="subject-prediction-form" aria-label="Subject prediction form">
+                        <div class="form-group">
+                            <label for="subject-selector" id="subject-selector-label">Subject</label>
+                            <select id="subject-selector" name="subject" class="form-select" required aria-labelledby="subject-selector-label" aria-describedby="subject-help">
+                                <option value="">Choose a subject...</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Biology">Biology</option>
+                            </select>
+                            <span id="subject-help" class="form-help sr-only">Select the subject for which you want to generate predictions</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="year-selector" id="year-selector-label">Target Year</label>
+                            <select id="year-selector" name="year" class="form-select" required aria-labelledby="year-selector-label" aria-describedby="year-help">
+                                <option value="">Choose a year...</option>
+                                <option value="2026">2026</option>
+                                <option value="2027">2027</option>
+                                <option value="2028">2028</option>
+                            </select>
+                            <span id="year-help" class="form-help sr-only">Select the target year for predictions</span>
+                        </div>
+
+                        <button type="submit" class="btn-primary generate-btn" aria-label="Generate subject prediction">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            Generate Prediction
+                        </button>
+                    </form>
+
+                    <!-- Results will be displayed here -->
+                    <div class="results-display hidden" id="subject-prediction-results" role="region" aria-live="polite" aria-label="Prediction results">
+                        <!-- Results populated by JavaScript -->
+                    </div>
+
+                    <div class="loading-state hidden" id="subject-loading" role="status" aria-live="polite">
+                        <div class="spinner" aria-hidden="true"></div>
+                        <p>Generating prediction...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Chapter Analysis Panel (Subtask 3.4) -->
+            <div class="prediction-panel" id="chapter-analysis-panel">
+                <div class="panel-header">
+                    <h2>Chapter Analysis</h2>
+                    <p>View prediction probabilities for each chapter</p>
+                </div>
+                <div class="panel-content">
+                    <!-- Subject Tabs -->
+                    <div class="subject-tabs" role="tablist" aria-label="Subject selection">
+                        <button class="tab-btn active" data-subject="Physics" role="tab" aria-selected="true" aria-controls="physics-chapters" id="physics-tab">Physics</button>
+                        <button class="tab-btn" data-subject="Chemistry" role="tab" aria-selected="false" aria-controls="chemistry-chapters" id="chemistry-tab">Chemistry</button>
+                        <button class="tab-btn" data-subject="Biology" role="tab" aria-selected="false" aria-controls="biology-chapters" id="biology-tab">Biology</button>
+                    </div>
+
+                    <!-- Sort and Filter Controls -->
+                    <div class="analysis-controls">
+                        <div class="control-group">
+                            <label for="sort-by" id="sort-by-label">Sort by:</label>
+                            <select id="sort-by" class="filter-select" aria-labelledby="sort-by-label">
+                                <option value="probability-desc">Probability (High to Low)</option>
+                                <option value="probability-asc">Probability (Low to High)</option>
+                                <option value="name-asc">Chapter Name (A-Z)</option>
+                                <option value="name-desc">Chapter Name (Z-A)</option>
+                            </select>
+                        </div>
+
+                        <div class="control-group">
+                            <label for="filter-class" id="filter-class-label">Filter by Class:</label>
+                            <select id="filter-class" class="filter-select" aria-labelledby="filter-class-label">
+                                <option value="all">All Classes</option>
+                                <option value="11">Class 11</option>
+                                <option value="12">Class 12</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <!-- Chapter List Container -->
+                    <div class="chapter-list-container" id="chapter-list-container" role="region" aria-live="polite" aria-label="Chapter analysis results">
+                        <!-- Chapter list populated by JavaScript -->
+                    </div>
+
+                    <div class="loading-state" id="chapter-loading" role="status" aria-live="polite">
+                        <div class="spinner" aria-hidden="true"></div>
+                        <p>Loading chapter analysis...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Complete NEET Prediction Panel (Subtask 3.5) -->
+            <div class="prediction-panel" id="complete-neet-panel">
+                <div class="panel-header">
+                    <h2>Complete NEET Prediction</h2>
+                    <span class="premium-badge" aria-label="Premium feature">⭐ Premium</span>
+                    <p>Generate a full 200-question predicted paper</p>
+                </div>
+                <div class="panel-content">
+                    <form class="prediction-form" id="complete-neet-form" aria-label="Complete NEET prediction form">
+                        <div class="form-group">
+                            <label for="complete-year-selector" id="complete-year-label">Target Year</label>
+                            <select id="complete-year-selector" name="year" class="form-select" required aria-labelledby="complete-year-label" aria-describedby="complete-year-help">
+                                <option value="">Choose a year...</option>
+                                <option value="2026">2026</option>
+                                <option value="2027">2027</option>
+                                <option value="2028">2028</option>
+                            </select>
+                            <span id="complete-year-help" class="form-help sr-only">Select the target year for complete NEET prediction</span>
+                        </div>
+
+                        <button type="submit" class="btn-primary generate-btn" aria-label="Generate complete NEET paper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            Generate Complete Paper
+                        </button>
+                    </form>
+
+                    <!-- Results Display -->
+                    <div class="complete-neet-results hidden" id="complete-neet-results" role="region" aria-live="polite" aria-label="Complete NEET paper results">
+                        <!-- Overall Confidence Score -->
+                        <div class="confidence-score-display">
+                            <h3>Overall Confidence Score</h3>
+                            <div class="confidence-circle" role="img" aria-label="Confidence score">
+                                <span class="confidence-value" id="overall-confidence">0%</span>
+                            </div>
+                        </div>
+
+                        <!-- Subject-wise Breakdown -->
+                        <div class="subject-breakdown">
+                            <h3>Subject-wise Breakdown (NEET 2026 Pattern)</h3>
+                            <div class="breakdown-grid">
+                                <div class="breakdown-card">
+                                    <h4>Physics</h4>
+                                    <p class="question-count">45 Questions</p>
+                                    <p class="attempt-count">All Compulsory</p>
+                                    <div class="confidence-bar">
+                                        <div class="confidence-fill" id="physics-confidence-fill"></div>
+                                    </div>
+                                    <p class="confidence-text" id="physics-confidence">0%</p>
+                                </div>
+
+                                <div class="breakdown-card">
+                                    <h4>Chemistry</h4>
+                                    <p class="question-count">45 Questions</p>
+                                    <p class="attempt-count">All Compulsory</p>
+                                    <div class="confidence-bar">
+                                        <div class="confidence-fill" id="chemistry-confidence-fill"></div>
+                                    </div>
+                                    <p class="confidence-text" id="chemistry-confidence">0%</p>
+                                </div>
+
+                                <div class="breakdown-card">
+                                    <h4>Biology</h4>
+                                    <p class="question-count">90 Questions</p>
+                                    <p class="attempt-count">All Compulsory</p>
+                                    <div class="confidence-bar">
+                                        <div class="confidence-fill" id="biology-confidence-fill"></div>
+                                    </div>
+                                    <p class="confidence-text" id="biology-confidence">0%</p>
+                                </div>
+                            </div>
+                        </div>
+
+                        <button class="btn-primary" id="start-complete-test-btn" aria-label="Start predicted test">
+                            Start Predicted Test
+                        </button>
+                    </div>
+
+                    <div class="loading-state hidden" id="complete-loading" role="status" aria-live="polite">
+                        <div class="spinner" aria-hidden="true"></div>
+                        <p>Generating complete paper...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Prediction Insights Panel (Subtask 3.6) -->
+            <div class="prediction-panel" id="insights-panel">
+                <div class="panel-header">
+                    <h2>Prediction Insights</h2>
+                    <p>Detailed analysis and trends</p>
+                </div>
+                <div class="panel-content">
+                    <!-- Data Summary Sections -->
+                    <div class="summary-grid">
+                        <div class="summary-card">
+                            <h3>High Probability Topics</h3>
+                            <ul class="topic-list high-probability-list" id="high-probability-list" role="list">
+                                <li class="loading" role="status">Loading...</li>
+                            </ul>
+                        </div>
+
+                        <div class="summary-card">
+                            <h3>Recommended Focus Areas</h3>
+                            <ul class="topic-list recommended-focus-list" id="recommended-focus-list" role="list">
+                                <li class="loading" role="status">Loading...</li>
+                            </ul>
+                        </div>
+
+                        <div class="summary-card">
+                            <h3>Trend Analysis</h3>
+                            <div class="trend-summary" id="trend-summary">
+                                <p class="loading">Loading trend data...</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Chart Placeholders -->
+                    <div class="chart-grid">
+                        <div class="chart-card">
+                            <h3>Topic Frequency Analysis</h3>
+                            <div class="chart-wrapper">
+                                <canvas id="topic-frequency-chart" role="img" aria-label="Topic frequency chart"></canvas>
+                            </div>
+                        </div>
+
+                        <div class="chart-card">
+                            <h3>Difficulty Distribution</h3>
+                            <div class="chart-wrapper">
+                                <canvas id="difficulty-chart" role="img" aria-label="Difficulty distribution chart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="loading-state" id="insights-loading" role="status" aria-live="polite">
+                        <div class="spinner" aria-hidden="true"></div>
+                        <p>Loading insights...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Smart Paper Generation Panel (Task 13.1) -->
+            <div class="prediction-panel" id="smart-paper-panel">
+                <div class="panel-header">
+                    <h2>Smart Paper Generator</h2>
+                    <p>Create personalized practice papers based on your weak areas</p>
+                </div>
+                <div class="panel-content">
+                    <form class="prediction-form" id="smart-paper-form" aria-label="Smart paper generation form">
+                        <div class="form-group">
+                            <label for="smart-subject-selector" id="smart-subject-label">Subject</label>
+                            <select id="smart-subject-selector" name="subject" class="form-select" required aria-labelledby="smart-subject-label" aria-describedby="smart-subject-help">
+                                <option value="">Choose a subject...</option>
+                                <option value="Physics">Physics</option>
+                                <option value="Chemistry">Chemistry</option>
+                                <option value="Biology">Biology</option>
+                            </select>
+                            <span id="smart-subject-help" class="form-help sr-only">Select the subject for smart paper generation</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="focus-chapters-selector" id="focus-chapters-label">Focus Chapters (Optional)</label>
+                            <select id="focus-chapters-selector" name="focusChapters" class="form-select" multiple size="5" aria-labelledby="focus-chapters-label" aria-describedby="focus-chapters-help">
+                                <!-- Options will be populated dynamically based on selected subject -->
+                            </select>
+                            <span id="focus-chapters-help" class="form-help">Hold Ctrl/Cmd to select multiple chapters. Leave empty to include all chapters.</span>
+                        </div>
+
+                        <div class="form-group">
+                            <label for="difficulty-selector" id="difficulty-label">Difficulty Level</label>
+                            <select id="difficulty-selector" name="difficulty" class="form-select" required aria-labelledby="difficulty-label" aria-describedby="difficulty-help">
+                                <option value="">Choose difficulty...</option>
+                                <option value="easy">Easy</option>
+                                <option value="medium">Medium</option>
+                                <option value="hard">Hard</option>
+                                <option value="mixed" selected>Mixed (Recommended)</option>
+                            </select>
+                            <span id="difficulty-help" class="form-help sr-only">Select the difficulty level for the practice paper</span>
+                        </div>
+
+                        <button type="submit" class="btn-primary generate-btn" aria-label="Generate smart paper">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" aria-hidden="true"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"></path></svg>
+                            Generate Smart Paper
+                        </button>
+                    </form>
+
+                    <!-- Results Display -->
+                    <div class="smart-paper-results hidden" id="smart-paper-results" role="region" aria-live="polite" aria-label="Smart paper results">
+                        <!-- Results populated by JavaScript -->
+                    </div>
+
+                    <div class="loading-state hidden" id="smart-paper-loading" role="status" aria-live="polite">
+                        <div class="spinner" aria-hidden="true"></div>
+                        <p>Generating smart paper...</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Accuracy Tracker Section (Subtask 3.7) -->
+            <div class="prediction-panel" id="accuracy-tracker-panel">
+                <div class="panel-header">
+                    <h2>Prediction Accuracy Tracker</h2>
+                    <p>Historical accuracy metrics</p>
+                </div>
+                <div class="panel-content">
+                    <!-- Overall Accuracy Display -->
+                    <div class="accuracy-overview">
+                        <div class="accuracy-main">
+                            <h3>Overall Accuracy</h3>
+                            <div class="accuracy-circle accuracy-circle-large" role="img" aria-label="Overall accuracy percentage">
+                                <span class="accuracy-value" id="overall-accuracy-value">0%</span>
+                            </div>
+                            <p class="accuracy-note">Based on <span id="papers-analyzed">0</span> past papers</p>
+                        </div>
+
+                        <!-- Subject-wise Breakdown -->
+                        <div class="accuracy-breakdown">
+                            <h3>Subject-wise Accuracy</h3>
+                            <div class="accuracy-bars">
+                                <div class="accuracy-bar-item">
+                                    <div class="bar-label">
+                                        <span>Physics</span>
+                                        <span class="accuracy" id="physics-accuracy">0%</span>
+                                    </div>
+                                    <div class="accuracy-bar">
+                                        <div class="accuracy-bar-fill" id="physics-accuracy-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Physics accuracy"></div>
+                                    </div>
+                                </div>
+
+                                <div class="accuracy-bar-item">
+                                    <div class="bar-label">
+                                        <span>Chemistry</span>
+                                        <span class="accuracy" id="chemistry-accuracy">0%</span>
+                                    </div>
+                                    <div class="accuracy-bar">
+                                        <div class="accuracy-bar-fill" id="chemistry-accuracy-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Chemistry accuracy"></div>
+                                    </div>
+                                </div>
+
+                                <div class="accuracy-bar-item">
+                                    <div class="bar-label">
+                                        <span>Biology</span>
+                                        <span class="accuracy" id="biology-accuracy">0%</span>
+                                    </div>
+                                    <div class="accuracy-bar">
+                                        <div class="accuracy-bar-fill" id="biology-accuracy-bar" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-label="Biology accuracy"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Historical Chart Placeholder -->
+                    <div class="chart-container">
+                        <h3>Accuracy Trend Over Years</h3>
+                        <div class="chart-wrapper">
+                            <canvas id="accuracy-trend-chart" role="img" aria-label="Accuracy trend over years chart"></canvas>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="main-footer">
+        <div class="footer-content">
+            <div class="footer-section">
+                <h4>Contact Us</h4>
+                <p>For any issues or support, please email us at:</p>
+                <a href="mailto:support@vidyatid.com">support@vidyatid.com</a>
+            </div>
+
+            <div class="footer-section">
+                <h4>Meet the Team</h4>
+                <div class="team-members">
+                    <div class="team-member">
+                        <p>Ajay Kumar T N</p>
+                        <span>Lead</span>
+                    </div>
+                    <div class="team-member">
+                        <p>Adithya N Murthy</p>
+                        <span>AI Specialist</span>
+                    </div>
+                    <div class="team-member">
+                        <p>Abhishek Birada</p>
+                        <span>UI/UX Designer</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-bottom">
+            <p>&copy; 2025 VidyaTid. All Rights Reserved.</p>
+        </div>
+    </footer>
+
+    <!-- Authentication Check Script -->
+    <script src="{{ url_for('static', filename='js/auth-check.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/user-profile-dropdown.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/feature-gate.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/predictions.js') }}"></script>
+
+    <script>
+        // Check authentication on page load
+        document.addEventListener('DOMContentLoaded', async function() {
+            // Check authentication
+            const isAuthenticated = await window.authCheck.checkAuth();
+            
+            if (!isAuthenticated) {
+                // Redirect to login if not authenticated
+                window.location.href = '/auth?redirect=' + encodeURIComponent(window.location.pathname);
+                return;
+            }
+
+            // Update navigation
+            window.authCheck.updateAuthNavigation();
+        });
+    </script>
+
+</body>
+</html>
